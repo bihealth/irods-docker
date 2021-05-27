@@ -1,6 +1,12 @@
-FROM centos:7
+#
+# Stage: first / main
+#
+FROM centos:7 as main
 
 MAINTAINER Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>
+LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
+
+ENV IRODS_PKG_VERSION=4.2.8-1
 
 # Install repositories and install latest updates.
 RUN yum install -y epel-release && \
@@ -13,18 +19,18 @@ RUN yum install -y epel-release && \
 
 # Install dependency packages
 RUN yum install -y \
-        sssd \
-        sssd-ldap \
-        sssd-tools \
         postgresql12 \
         sudo
 
 # Install iRODS
-RUN yum -y install irods-server irods-database-plugin-postgres irods-devel \
- && useradd -d /var/lib/irods irods \
- && yum clean all \
- && rm -rf /var/cache/yum/* \
- && rm -rf /tmp/*
+RUN yum -y install \
+    irods-server-${IRODS_PKG_VERSION}.x86_64.rpm \
+    irods-database-plugin-postgres \
+    irods-devel \
+  && useradd -d /var/lib/irods irods \
+  && yum clean all \
+  && rm -rf /var/cache/yum/* \
+  && rm -rf /tmp/*
 
 ## installing irods python rule-engine plugin
 RUN yum -y install irods-rule-engine-plugin-python
@@ -61,3 +67,17 @@ EXPOSE 4321 $IRODS_ZONE_PORT $IRODS_CONTROLPLANE_PORT $IRODS_DATA_PORT_RANGE_BEG
 ## entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["irods"]
+
+#
+# Stage: add SSSD support
+#
+
+FROM main AS sssd
+
+RUN yum install -y \
+        sssd \
+        sssd-ldap \
+        sssd-tools \
+  && yum clean all \
+  && rm -rf /var/cache/yum/* \
+  && rm -rf /tmp/*

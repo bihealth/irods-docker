@@ -3,6 +3,19 @@
 This repository contains the necessary files to build a Docker image for iRODS.
 The code is based on [hurngchunlee/docker-irods](https://github.com/hurngchunlee/docker-irods).
 
+## What's this?
+
+This is a Docker image from CUBI @bihealth that we use for our iRODS deployment.
+It is based on the great work in [hurngchunlee/docker-irods](https://github.com/hurngchunlee/docker-irods).
+We simplified things a bit and publish the results on this repository's packages as a Docker image.
+
+### SSSD Support
+
+Also, we provide the images `${VERSION}-sssd` (e.g., `latest-sssd`) that have SSSD installed.
+You will have to share `/var/lib/sss` between the SSSD container and iRODS so both containers can communicate.
+
+In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
+
 ## Building
 
 ```bash
@@ -15,13 +28,11 @@ $ docker build .
 Each container exposes volumes for data persistency.
 The list of volumes are provided in the table below:
 
-| container  | path in container               | usage                         |
-|------------|---------------------------------|-------------------------------|
-| irods-icat | /etc/irods                      | iCAT configuration            |
-| irods-icat | /var/lib/irods/iRODS/server/log | iCAT server log               |
-| irods-resc | /etc/irods                      | resource server configuration |
-| irods-resc | /var/lib/irods/iRODS/server/log | resource server log           |
-| irods-resc | /var/lib/irods/Vault            | resource server data vault    |
+| path in container               | usage                         |
+|---------------------------------|-------------------------------|
+| /etc/irods                      | resource server configuration |
+| /var/lib/irods/iRODS/server/log | resource server log           |
+| /var/lib/irods/Vault            | resource server data vault    |
 
 For iRODS services, the setup script (`/var/lib/irods/scripts/setup_irods.py`) is only executed when the file `/etc/irods/.provisioned` is not presented.
 The file `/etc/irods/.provisioned` is also created when the setup script is executed successfully.
