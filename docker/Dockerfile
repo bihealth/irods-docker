@@ -66,7 +66,7 @@ EXPOSE 4321 $IRODS_ZONE_PORT $IRODS_CONTROLPLANE_PORT $IRODS_DATA_PORT_RANGE_BEG
 
 ## entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["irods"]
+CMD ["icat-enabled"]
 
 #
 # Stage: add SSSD support
