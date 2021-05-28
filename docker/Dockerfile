@@ -8,6 +8,10 @@ LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
 
 ENV IRODS_PKG_VERSION=4.2.8-1
 
+# Add the wait script to the image
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /usr/local/bin/wait
+RUN chmod +x /usr/local/bin/wait
+
 # Install repositories and install latest updates.
 RUN yum install -y epel-release && \
     rpm --import https://packages.irods.org/irods-signing-key.asc && \
@@ -40,11 +44,11 @@ RUN chmod +x /irods_python-re_installer.py
 ## environment variables for container runtime
 ENV IRODS_ADMIN_USER=rods
 ENV IRODS_ADMIN_PASS=rods
-ENV IRODS_ZONE_NAME=rdmtst
+ENV IRODS_ZONE_NAME=demoZone
 ENV IRODS_ZONE_KEY=TEMPORARY_zone_key
 ENV IRODS_ZONE_PORT=1247
 ENV IRODS_NEGOTIATION_KEY=TEMPORARY_32byte_negotiation_key
-ENV IRODS_ICAT_DBSERVER=icat-db
+ENV IRODS_ICAT_DBSERVER=postgres
 ENV IRODS_ICAT_DBPORT=5432
 ENV IRODS_ICAT_DBNAME=ICAT
 ENV IRODS_ICAT_DBUSER=rods
@@ -55,8 +59,8 @@ ENV IRODS_DATA_PORT_RANGE_BEG=20000
 ENV IRODS_DATA_PORT_RANGE_END=20199
 
 ## copy scripts
-COPY genresp.sh docker-entrypoint.sh irods_login.sh mkresc.sh /
-RUN chmod +x /genresp.sh /docker-entrypoint.sh /irods_login.sh /mkresc.sh
+COPY genresp.sh docker-entrypoint.sh irods_login.sh core.py.template /
+RUN chmod +x /genresp.sh /docker-entrypoint.sh /irods_login.sh
 
 ## data volumes
 VOLUME "/etc/irods" "/var/lib/irods/iRODS/server/log" "/var/lib/irods/Vault"
@@ -78,6 +82,7 @@ RUN yum install -y \
         sssd \
         sssd-ldap \
         sssd-tools \
+        strace \
   && yum clean all \
   && rm -rf /var/cache/yum/* \
   && rm -rf /tmp/*

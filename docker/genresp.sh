@@ -4,7 +4,7 @@
 # Generates responses for iRODS' setup_irods.sh script.
 # Zone SID, agent key, database admin, and admin password are all randomized.
 
-RESPFILE=$1
+RESPFILE=$2
 
 SCHEMA_URI="file:///var/lib/irods/configuration_schemas" 
 
@@ -26,7 +26,7 @@ fi
 echo $IRODS_ZONE_NAME >> $RESPFILE                # zone name
 if [[ "$1" == "resc-only" ]]; then
 	echo $IRODS_ICAT_HOST >> $RESPFILE            # iCAT server
-else
+fi
 echo $IRODS_ZONE_PORT >> $RESPFILE                # zone port 
 echo $IRODS_DATA_PORT_RANGE_BEG >> $RESPFILE      # transport starting port #
 echo $IRODS_DATA_PORT_RANGE_END >> $RESPFILE      # transport ending port #
