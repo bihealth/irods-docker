@@ -59,7 +59,7 @@ ENV IRODS_DATA_PORT_RANGE_BEG=20000
 ENV IRODS_DATA_PORT_RANGE_END=20199
 
 ## copy scripts
-COPY genresp.sh docker-entrypoint.sh irods_login.sh core.py.template /
+COPY genresp.sh docker-entrypoint.sh irods_login.sh templates/core.py.template templates/unattended_config.json.j2 /
 RUN chmod +x /genresp.sh /docker-entrypoint.sh /irods_login.sh
 
 ## data volumes

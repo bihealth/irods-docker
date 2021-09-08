@@ -44,8 +44,11 @@ if [[ "$1" == "icat-enabled" ]] || [[ "$1" == "resc-only" ]]; then
         echo $IRODS_ICAT_DBPASS \
         | createdb -h $IRODS_ICAT_DBSERVER -p 5432 -U $IRODS_ICAT_DBUSER -W ICAT
 
+        echo "set up unattended configuration file"
+        # TODO: Set up from template and env vars
+
         echo "perform iRODS setup"
-        cat /response.txt | python /var/lib/irods/scripts/setup_irods.py
+        cat /response.txt | python /var/lib/irods/scripts/setup_irods.py --json_configuration_file=/unattended_config.json
 
         cp /var/lib/irods/.irods/irods_environment.json /etc/irods/irods_environment.json
         cp /var/lib/irods/.odbc.ini /etc/irods/.odbc.ini
