@@ -3,6 +3,8 @@
 This repository contains the necessary files to build a Docker image for iRODS.
 The code is based on [hurngchunlee/docker-irods](https://github.com/hurngchunlee/docker-irods).
 
+**TODO:** Update readme for unattended config changes
+
 ## What's this?
 
 This is a Docker image from CUBI @bihealth that we use for our iRODS deployment.
@@ -52,20 +54,22 @@ The variables are feeded into the iRODS setup script (`/var/lib/irods/scripts/se
 They are summarised below.
 The "only iCAT" column shows whether the variable is required in the icat-enabled instanced only.
 
+**TODO:** Update vars
+
 |   variable name           | default value                    | only iCAT? |
 |---------------------------|----------------------------------|------------|
 | IRODS_ICAT_DBSERVER       | icat-db                          | yes |
 | IRODS_ICAT_DBPORT         | 5432                             | yes |
 | IRODS_ICAT_DBNAME         | ICAT                             | yes |
-| IRODS_ICAT_DBUSER         | irods                            | yes |  
+| IRODS_ICAT_DBUSER         | irods                            | yes |
 | IRODS_ICAT_DBPASS         | test123                          | yes |
-| IRODS_ZONE_NAME           | rdmtst                           | no | 
-| IRODS_ZONE_PORT           | 1247                             | no | 
-| IRODS_DATA_PORT_RANGE_BEG | 20000                            | no | 
-| IRODS_DATA_PORT_RANGE_END | 20199                            | no | 
-| IRODS_CONTROLPLAN_PORT    | 1248                             | no | 
-| IRODS_ADMIN_USER          | rods                             | no | 
-| IRODS_ADMIN_PASS          | rods 							   | no | 
-| IRODS_ZONE_KEY            | TEMPORARY_zone_key               | no | 
-| IRODS_NEGOTIATION_KEY     | TEMPORARY_32byte_negotiation_key | no | 
-| IRODS_CONTROLPLANE_KEY    | TEMPORARY__32byte_ctrl_plane_key | no | 
+| IRODS_ZONE_NAME           | rdmtst                           | no |
+| IRODS_ZONE_PORT           | 1247                             | no |
+| IRODS_DATA_PORT_RANGE_BEG | 20000                            | no |
+| IRODS_DATA_PORT_RANGE_END | 20199                            | no |
+| IRODS_CONTROLPLAN_PORT    | 1248                             | no |
+| IRODS_ADMIN_USER          | rods                             | no |
+| IRODS_ADMIN_PASS          | rods 							   | no |
+| IRODS_ZONE_KEY            | TEMPORARY_zone_key               | no |
+| IRODS_NEGOTIATION_KEY     | TEMPORARY_32byte_negotiation_key | no |
+| IRODS_CONTROLPLANE_KEY    | TEMPORARY__32byte_ctrl_plane_key | no |

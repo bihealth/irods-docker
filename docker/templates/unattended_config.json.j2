@@ -1,12 +1,7 @@
 {
     "id": "file:///var/lib/irods/configuration_schemas/v3/unattended_installation.json",
     "$schema": "http://json-schema.org/draft-04/schema#",
-    {% if inventory_hostname == irods_icat_server %}
-    {# set default-PW to: "rods" #}
-    "admin_password": "rods",
-    {% else %}
-    "admin_password": "{{ irods_rods_password }}",
-    {% endif %}
+    "admin_password": "{{ IRODS_ADMIN_PASS }}",
     {# "version": { #}
         {# "commit_id": "8e4e6eca104b5cfdb5945a3fbc08d96549ea3e7e", #}
         {# "configuration_schema_version": 3, #}
@@ -29,29 +24,29 @@
             "transfer_chunk_size_for_parallel_transfer_in_megabytes": 40
         },
         "catalog_provider_hosts": [
-            "{{ irods_icat_server_fqdn }}"
+            "{{ IRODS_HOST_NAME }}"
         ],
-        "catalog_service_role": "{{ irods_role }}",
+        "catalog_service_role": "{{ IRODS_ROLE }}",
         "default_dir_mode": "0750",
         "default_file_mode": "0600",
-        "default_hash_scheme": "MD5",
-        "default_resource_name": "{{ inventory_hostname.split('.')[0] }}_demoResc",
+        "default_hash_scheme": "{{ IRODS_DEFAULT_HASH_SCHEME|default("MD5") }}",
+        "default_resource_name": "demoResc",
         "environment_variables": {
-            "IRODS_DATABASE_USER_PASSWORD_SALT": "{{ irods_password_salt }}"
+            "IRODS_DATABASE_USER_PASSWORD_SALT": "{{ IRODS_PASSWORD_SALT }}"
         },
         "federation": [],
         "match_hash_policy": "compatible",
-        "negotiation_key": "{{ irods_negotiation_key }}",
+        "negotiation_key": "{{ IRODS_NEGOTIATION_KEY }}",
         "plugin_configuration": {
             "authentication": {},
             "database": {
                 "postgres": {
-                    "db_host": "{{ irods_db_host }}",
-                    "db_name": "ICAT",
-                    "db_odbc_driver": "{{ irods_odbc_driver }}",
-                    "db_password": "{{ lookup('passwordstore', 'omics-irods-testing/irods_db_user_pw' ) }}",
-                    "db_port": {{ postgres_client_port|default(5432) }},
-                    "db_username": "{{ irods_db_user }}"
+                    "db_host": "{{ IRODS_ICAT_DBSERVER }}",
+                    "db_name": "{{ IRODS_ICAT_DBNAME }}",
+                    "db_odbc_driver": "{{ IRODS_ODBC_DRIVER }}",
+                    "db_password": "{{ IRODS_ICAT_DBPASS }}",
+                    "db_port": {{ IRODS_ICAT_DBPORT|default(5432) }},
+                    "db_username": "{{ IRODS_ICAT_DBUSER }}"
                 }
             },
             "network": {},
@@ -93,52 +88,52 @@
         "schema_version": "v3",
         "server_control_plane_encryption_algorithm": "AES-256-CBC",
         "server_control_plane_encryption_num_hash_rounds": 16,
-        "server_control_plane_key": "{{ irods_control_plane_key }}",
-        "server_control_plane_port": 1248,
+        "server_control_plane_key": "{{ IRODS_CONTROL_PLANE_KEY }}",
+        "server_control_plane_port": {{ IRODS_CONTROL_PLANE_PORT }},
         "server_control_plane_timeout_milliseconds": 10000,
-        "server_port_range_end": 20199,
-        "server_port_range_start": 20000,
+        "server_port_range_start": {{ IRODS_DATA_PORT_RANGE_START }},
+        "server_port_range_end": {{ IRODS_DATA_PORT_RANGE_END }},
         "xmsg_port": 1279,
-        "zone_auth_scheme": "native",
-        "zone_key": "{{ irods_zone_key }}",
-        "zone_name": "{{ irods_zone_name }}",
-        "zone_port": 1247,
-        "zone_user": "rods"
+        "zone_auth_scheme": "{{ IRODS_AUTHENTICATION_SCHEME }}",
+        "zone_key": "{{ IRODS_ZONE_KEY }}",
+        "zone_name": "{{ IRODS_ZONE_NAME }}",
+        "zone_port": {{ IRODS_ZONE_PORT }},
+        "zone_user": "{{ IRODS_ADMIN_USER }}"
     },
     "service_account_environment": {
-        "irods_authentication_scheme": "native",
-        "irods_client_server_negotiation": "request_server_negotiation",
-        "irods_client_server_policy": "CS_NEG_REQUIRE",
+        "irods_authentication_scheme": "{{ IRODS_AUTHENTICATION_SCHEME }}",
+        "irods_client_server_negotiation": "{{ IRODS_CLIENT_SERVER_NEGOTIATION }}",
+        "irods_client_server_policy": "{{ IRODS_CLIENT_SERVER_POLICY }}",
         "irods_connection_pool_refresh_time_in_seconds": 300,
-        "irods_cwd": "/{{ irods_zone_name }}/home/rods",
-        "irods_default_hash_scheme": "MD5",
+        "irods_cwd": "/{{ IRODS_ZONE_NAME }}/home/rods",
+        "irods_default_hash_scheme": "{{ IRODS_DEFAULT_HASH_SCHEME|default("MD5") }}",
         "irods_default_number_of_transfer_threads": 4,
         "irods_default_resource": "demoResc",
         "irods_encryption_algorithm": "AES-256-CBC",
         "irods_encryption_key_size": 32,
         "irods_encryption_num_hash_rounds": 16,
         "irods_encryption_salt_size": 8,
-        "irods_home": "/{{ irods_zone_name }}/home/rods",
-        "irods_host": "{{ irods_icat_server_fqdn }}",
+        "irods_home": "/{{ IRODS_ZONE_NAME }}/home/rods",
+        "irods_host": "{{ IRODS_HOST_NAME }}",
         "irods_match_hash_policy": "compatible",
         "irods_maximum_size_for_single_buffer_in_megabytes": 32,
-        "irods_port": 1247,
+        "irods_port": {{ IRODS_ZONE_PORT }},
         "irods_server_control_plane_encryption_algorithm": "AES-256-CBC",
         "irods_server_control_plane_encryption_num_hash_rounds": 16,
-        "irods_server_control_plane_key": "{{ irods_control_plane_key }}",
-        "irods_server_control_plane_port": 1248,
+        "irods_server_control_plane_key": "{{ IRODS_CONTROL_PLANE_KEY }}",
+        "irods_server_control_plane_port": {{ IRODS_CONTROL_PLANE_PORT|default(1248) }},
 
-        {% if irods_ssl_ca_cert_path|default(false) %}
-        "irods_ssl_ca_certificate_file": "{{ irods_ssl_ca_cert_path }}",
+        {% if IRODS_SSL_CA_CERT_PATH|default(false) %}
+        "irods_ssl_ca_certificate_file": "{{ IRODS_SSL_CA_CERT_PATH }}",
         {% endif %}
 
         "irods_ssl_certificate_chain_file": "/etc/irods/server.crt",
         "irods_ssl_certificate_key_file": "/etc/irods/server.key",
         "irods_ssl_dh_params_file": "/etc/irods/dhparams.pem",
-        "irods_ssl_verify_server": "{{ irods_service_account_irods_ssl_verify_server }}",
+        "irods_ssl_verify_server": "{{ IRODS_SSL_VERIFY_SERVER }}",
         "irods_transfer_buffer_size_for_parallel_transfer_in_megabytes": 4,
-        "irods_user_name": "rods",
-        "irods_zone_name": "{{ irods_zone_name }}",
+        "irods_user_name": "{{ IRODS_ADMIN_USER }}",
+        "irods_zone_name": "{{ IRODS_ZONE_NAME }}",
         "schema_name": "irods_environment",
         "schema_version": "v3"
     },
@@ -148,10 +143,10 @@
         "schema_version": "v3"
     },
     "host_system_information": {
-        "service_account_user_name": "{{ irods_account_user }}",
-        "service_account_group_name": "{{ irods_account_user }}"
+        "service_account_user_name": "{{ IRODS_SERVICE_ACCOUNT_USER }}",
+        "service_account_group_name": "{{ IRODS_SERVICE_ACCOUNT_GROUP }}"
         {# TODO begin #}
-        {# "hostname": "sodar-irods-res2-staging" #}
+        {# "hostname": "sodar-irods-x" #}
         {# TODO end #}
     },
     "host_access_control_config": {
