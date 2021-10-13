@@ -56,6 +56,7 @@ if [[ "$1" == "icat-enabled" ]] || [[ "$1" == "resc-only" ]]; then
 
         # Enable the python rule engine
         if [ -f /irods_python-re_installer.py ]; then
+            echo "Enable python rule engine"
             ./irods_python-re_installer.py
         fi
 
@@ -65,6 +66,7 @@ if [[ "$1" == "icat-enabled" ]] || [[ "$1" == "resc-only" ]]; then
     find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown -c $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;
 
     # Restart iRODS after setup
+    echo "Restart iRODS"
     /etc/init.d/irods start
 
     # Wait for iCAT port to become available
@@ -75,6 +77,7 @@ if [[ "$1" == "icat-enabled" ]] || [[ "$1" == "resc-only" ]]; then
     done
     sleep 5
 
+    echo "Test iinit"
     su - irods -c "/irods_login.sh ${IRODS_ADMIN_PASS}"
 
     echo "iCAT at ${IRODS_HOST_NAME} ready!"

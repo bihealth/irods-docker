@@ -71,11 +71,11 @@ RUN yum -y install \
 
 ## Install iRODS python rule-engine plugin
 RUN yum -y install irods-rule-engine-plugin-python
-COPY irods_python-re_installer.py /
+COPY files/irods_python-re_installer.py /
 RUN chmod +x /irods_python-re_installer.py
 
 ## Copy scripts
-COPY docker-entrypoint.sh irods_login.sh \
+COPY docker-entrypoint.sh files/irods_login.sh \
      templates/core.py.template templates/unattended_config.json.j2 files/j2-filters.py /
 RUN chmod +x /docker-entrypoint.sh /irods_login.sh
 
