@@ -34,7 +34,8 @@ ENV IRODS_PKG_VERSION=4.2.8-1 \
     IRODS_SSL_CA_CERT_PATH= \
     IRODS_AUTHENTICATION_SCHEME=native \
     IRODS_CLIENT_SERVER_NEGOTIATION=off \
-    IRODS_CLIENT_SERVER_POLICY=CS_NEG_REFUSE
+    IRODS_CLIENT_SERVER_POLICY=CS_NEG_REFUSE \
+    IRODS_RESOURCE_DIRECTORY=/data/Vault
 
 # Add the wait script to the image
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /usr/local/bin/wait
@@ -69,23 +70,27 @@ RUN yum -y install \
   && rm -rf /var/cache/yum/* \
   && rm -rf /tmp/*
 
-## Install iRODS python rule-engine plugin
+# Install iRODS python rule-engine plugin
 RUN yum -y install irods-rule-engine-plugin-python
 COPY files/irods_python-re_installer.py /
 RUN chmod +x /irods_python-re_installer.py
 
-## Copy scripts
+# Copy scripts
 COPY docker-entrypoint.sh files/irods_login.sh \
      templates/core.py.template templates/unattended_config.json.j2 files/j2-filters.py /
 RUN chmod +x /docker-entrypoint.sh /irods_login.sh
 
-## Data volumes
-VOLUME "/etc/irods" "/var/lib/irods/iRODS/server/log" "/var/lib/irods/Vault"
+# Create iRODS vault dir
+RUN mkdir -p $IRODS_RESOURCE_DIRECTORY
+RUN chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
 
-## Network ports
+# Data volumes
+VOLUME "/etc/irods" "/var/lib/irods/iRODS/server/log"
+
+# Network ports
 EXPOSE 4321 $IRODS_ZONE_PORT $IRODS_CONTROL_PLANE_PORT $IRODS_DATA_PORT_RANGE_START-$IRODS_DATA_PORT_RANGE_END
 
-## Entrypoint
+# Entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["icat-enabled"]
 

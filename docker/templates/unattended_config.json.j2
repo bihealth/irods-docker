@@ -2,6 +2,7 @@
     "id": "file:///var/lib/irods/configuration_schemas/v3/unattended_installation.json",
     "$schema": "http://json-schema.org/draft-04/schema#",
     "admin_password": "{{ IRODS_ADMIN_PASS }}",
+    "default_resource_directory": "{{ IRODS_RESOURCE_DIRECTORY }}",
     {# "version": { #}
         {# "commit_id": "8e4e6eca104b5cfdb5945a3fbc08d96549ea3e7e", #}
         {# "configuration_schema_version": 3, #}
@@ -332,9 +333,3 @@
         }
     }
 }
-
-{# XXX #}
-{#     ],                                                                                  #}
-{#     "schema_version": "file:///var/lib/irods/configuration_schemas/v3/zone_bundle.json" #}
-{# }                                                                                       #}
-{# vim: set tabstop=4 shiftwidth=4 expandtab nowrap : #}

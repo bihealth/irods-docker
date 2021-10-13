@@ -65,8 +65,8 @@ if [[ "$1" == "icat-enabled" ]] || [[ "$1" == "resc-only" ]]; then
 
     find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown -c $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;
 
-    # Restart iRODS after setup
-    echo "Restart iRODS"
+    # Start iRODS
+    echo "Start iRODS"
     /etc/init.d/irods start
 
     # Wait for iCAT port to become available
