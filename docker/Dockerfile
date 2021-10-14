@@ -9,23 +9,18 @@ LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
 # Environment variables for container runtime
 # TODO: Setup for resc-only mode
 ENV IRODS_PKG_VERSION=4.2.8-1 \
+    IRODS_ROLE=provider \
     IRODS_HOST_NAME=localhost \
     IRODS_SERVICE_ACCOUNT_USER=irods \
     IRODS_SERVICE_ACCOUNT_GROUP=irods \
     IRODS_ADMIN_USER=rods \
     IRODS_ADMIN_PASS=rods \
     IRODS_ZONE_NAME=demoZone \
-    IRODS_ZONE_KEY=TEMPORARY_zone_key \
     IRODS_ZONE_PORT=1247 \
+    IRODS_ZONE_KEY=TEMPORARY_zone_key \
     IRODS_NEGOTIATION_KEY=TEMPORARY_32byte_negotiation_key \
-    IRODS_ODBC_DRIVER="PostgreSQL" \
-    IRODS_ICAT_DBSERVER=postgres \
-    IRODS_ICAT_DBPORT=5432 \
-    IRODS_ICAT_DBNAME=ICAT \
-    IRODS_ICAT_DBUSER=irods \
-    IRODS_ICAT_DBPASS=irods \
-    IRODS_CONTROL_PLANE_KEY=TEMPORARY__32byte_ctrl_plane_key \
     IRODS_CONTROL_PLANE_PORT=1248 \
+    IRODS_CONTROL_PLANE_KEY=TEMPORARY__32byte_ctrl_plane_key \
     IRODS_DATA_PORT_RANGE_START=20000 \
     IRODS_DATA_PORT_RANGE_END=20199 \
     IRODS_SSL_VERIFY_SERVER=none \
@@ -35,8 +30,13 @@ ENV IRODS_PKG_VERSION=4.2.8-1 \
     IRODS_CLIENT_SERVER_NEGOTIATION=off \
     IRODS_CLIENT_SERVER_POLICY=CS_NEG_REFUSE \
     IRODS_RESOURCE_DIRECTORY=/data/Vault \
-    IRODS_ROLE=provider \
-    IRODS_CATALOG_PROVIDER_HOST=localhost
+    IRODS_ODBC_DRIVER="PostgreSQL" \
+    IRODS_ICAT_DBSERVER=postgres \
+    IRODS_ICAT_DBPORT=5432 \
+    IRODS_ICAT_DBNAME=ICAT \
+    IRODS_ICAT_DBUSER=irods \
+    IRODS_ICAT_DBPASS=irods
+ENV IRODS_CATALOG_PROVIDER_HOST=${IRODS_HOST_NAME}
 
 # Add the wait script to the image
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /usr/local/bin/wait
@@ -93,6 +93,7 @@ EXPOSE 4321 $IRODS_ZONE_PORT $IRODS_CONTROL_PLANE_PORT $IRODS_DATA_PORT_RANGE_ST
 
 # Entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["irods-start"]
 
 #
 # Stage: add SSSD support
