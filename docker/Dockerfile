@@ -30,12 +30,13 @@ ENV IRODS_PKG_VERSION=4.2.8-1 \
     IRODS_DATA_PORT_RANGE_END=20199 \
     IRODS_SSL_VERIFY_SERVER=none \
     IRODS_PASSWORD_SALT=tempsalt \
-    IRODS_ROLE=provider \
     IRODS_SSL_CA_CERT_PATH= \
     IRODS_AUTHENTICATION_SCHEME=native \
     IRODS_CLIENT_SERVER_NEGOTIATION=off \
     IRODS_CLIENT_SERVER_POLICY=CS_NEG_REFUSE \
-    IRODS_RESOURCE_DIRECTORY=/data/Vault
+    IRODS_RESOURCE_DIRECTORY=/data/Vault \
+    IRODS_ROLE=provider \
+    IRODS_CATALOG_PROVIDER_HOST=localhost
 
 # Add the wait script to the image
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /usr/local/bin/wait
@@ -92,7 +93,6 @@ EXPOSE 4321 $IRODS_ZONE_PORT $IRODS_CONTROL_PLANE_PORT $IRODS_DATA_PORT_RANGE_ST
 
 # Entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["icat-enabled"]
 
 #
 # Stage: add SSSD support
