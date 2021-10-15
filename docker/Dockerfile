@@ -35,8 +35,8 @@ ENV IRODS_PKG_VERSION=4.2.8-1 \
     IRODS_ICAT_DBPORT=5432 \
     IRODS_ICAT_DBNAME=ICAT \
     IRODS_ICAT_DBUSER=irods \
-    IRODS_ICAT_DBPASS=irods
-ENV IRODS_CATALOG_PROVIDER_HOST=${IRODS_HOST_NAME}
+    IRODS_ICAT_DBPASS=irods \
+    IRODS_CATALOG_PROVIDER_HOST=
 
 # Add the wait script to the image
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /usr/local/bin/wait

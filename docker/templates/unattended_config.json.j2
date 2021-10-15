@@ -25,7 +25,11 @@
             "transfer_chunk_size_for_parallel_transfer_in_megabytes": 40
         },
         "catalog_provider_hosts": [
+            {% if IRODS_CATALOG_PROVIDER_HOST %}
             "{{ IRODS_CATALOG_PROVIDER_HOST }}"
+            {% else %}
+            "{{ IRODS_HOST_NAME }}"
+            {% endif %}
         ],
         "catalog_service_role": "{{ IRODS_ROLE }}",
         "default_dir_mode": "0750",
