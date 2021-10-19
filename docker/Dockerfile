@@ -6,13 +6,43 @@ FROM centos:7 as main
 MAINTAINER Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>
 LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
 
-ENV IRODS_PKG_VERSION=4.2.8-1
+# Environment variables for container runtime
+# TODO: Setup for resc-only mode
+ENV IRODS_PKG_VERSION=4.2.8-1 \
+    IRODS_ROLE=provider \
+    IRODS_HOST_NAME=localhost \
+    IRODS_SERVICE_ACCOUNT_USER=irods \
+    IRODS_SERVICE_ACCOUNT_GROUP=irods \
+    IRODS_ADMIN_USER=rods \
+    IRODS_ADMIN_PASS=rods \
+    IRODS_ZONE_NAME=demoZone \
+    IRODS_ZONE_PORT=1247 \
+    IRODS_ZONE_KEY=TEMPORARY_zone_key \
+    IRODS_NEGOTIATION_KEY=TEMPORARY_32byte_negotiation_key \
+    IRODS_CONTROL_PLANE_PORT=1248 \
+    IRODS_CONTROL_PLANE_KEY=TEMPORARY__32byte_ctrl_plane_key \
+    IRODS_DATA_PORT_RANGE_START=20000 \
+    IRODS_DATA_PORT_RANGE_END=20199 \
+    IRODS_SSL_VERIFY_SERVER=none \
+    IRODS_PASSWORD_SALT=tempsalt \
+    IRODS_SSL_CA_CERT_PATH= \
+    IRODS_AUTHENTICATION_SCHEME=native \
+    IRODS_CLIENT_SERVER_NEGOTIATION=off \
+    IRODS_CLIENT_SERVER_POLICY=CS_NEG_REFUSE \
+    IRODS_RESOURCE_DIRECTORY=/data/Vault \
+    IRODS_ODBC_DRIVER="PostgreSQL" \
+    IRODS_ICAT_DBSERVER=postgres \
+    IRODS_ICAT_DBPORT=5432 \
+    IRODS_ICAT_DBNAME=ICAT \
+    IRODS_ICAT_DBUSER=irods \
+    IRODS_ICAT_DBPASS=irods \
+    IRODS_CATALOG_PROVIDER_HOST=
 
 # Add the wait script to the image
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /usr/local/bin/wait
 RUN chmod +x /usr/local/bin/wait
 
-# Install repositories and install latest updates.
+# Install repositories and install latest updates
 RUN yum install -y epel-release && \
     rpm --import https://packages.irods.org/irods-signing-key.asc && \
     curl https://packages.irods.org/renci-irods.yum.repo \
@@ -23,54 +53,47 @@ RUN yum install -y epel-release && \
 
 # Install dependency packages
 RUN yum install -y \
-        postgresql12 \
-        sudo
+        postgresql11 \
+        sudo \
+        nc
+
+# Install j2cli for templating
+RUN yum -y install python-pip python-jinja2 python-yaml
+RUN pip install j2cli
 
 # Install iRODS
 RUN yum -y install \
     irods-server-${IRODS_PKG_VERSION}.x86_64.rpm \
     irods-database-plugin-postgres \
     irods-devel \
-  && useradd -d /var/lib/irods irods \
+  && useradd -d /var/lib/irods ${IRODS_SERVICE_ACCOUNT_USER} \
   && yum clean all \
   && rm -rf /var/cache/yum/* \
   && rm -rf /tmp/*
 
-## installing irods python rule-engine plugin
+# Install iRODS python rule-engine plugin
 RUN yum -y install irods-rule-engine-plugin-python
-COPY irods_python-re_installer.py /
+COPY files/irods_python-re_installer.py /
 RUN chmod +x /irods_python-re_installer.py
 
-## environment variables for container runtime
-ENV IRODS_ADMIN_USER=rods
-ENV IRODS_ADMIN_PASS=rods
-ENV IRODS_ZONE_NAME=demoZone
-ENV IRODS_ZONE_KEY=TEMPORARY_zone_key
-ENV IRODS_ZONE_PORT=1247
-ENV IRODS_NEGOTIATION_KEY=TEMPORARY_32byte_negotiation_key
-ENV IRODS_ICAT_DBSERVER=postgres
-ENV IRODS_ICAT_DBPORT=5432
-ENV IRODS_ICAT_DBNAME=ICAT
-ENV IRODS_ICAT_DBUSER=rods
-ENV IRODS_ICAT_DBPASS=rods
-ENV IRODS_CONTROLPLANE_PORT=1248
-ENV IRODS_CONTROLPLANE_KEY=TEMPORARY__32byte_ctrl_plane_key
-ENV IRODS_DATA_PORT_RANGE_BEG=20000
-ENV IRODS_DATA_PORT_RANGE_END=20199
+# Copy scripts
+COPY docker-entrypoint.sh files/irods_login.sh \
+     templates/core.py.template templates/unattended_config.json.j2 files/j2-filters.py /
+RUN chmod +x /docker-entrypoint.sh /irods_login.sh
 
-## copy scripts
-COPY genresp.sh docker-entrypoint.sh irods_login.sh core.py.template /
-RUN chmod +x /genresp.sh /docker-entrypoint.sh /irods_login.sh
+# Create iRODS vault dir
+RUN mkdir -p $IRODS_RESOURCE_DIRECTORY
+RUN chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
 
-## data volumes
-VOLUME "/etc/irods" "/var/lib/irods/iRODS/server/log" "/var/lib/irods/Vault"
+# Data volumes
+VOLUME "/etc/irods" "/var/lib/irods/iRODS/server/log"
 
-## network ports
-EXPOSE 4321 $IRODS_ZONE_PORT $IRODS_CONTROLPLANE_PORT $IRODS_DATA_PORT_RANGE_BEG-$IRODS_DATA_PORT_RANGE_END
+# Network ports
+EXPOSE 4321 $IRODS_ZONE_PORT $IRODS_CONTROL_PLANE_PORT $IRODS_DATA_PORT_RANGE_START-$IRODS_DATA_PORT_RANGE_END
 
-## entrypoint
+# Entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["icat-enabled"]
+CMD ["irods-start"]
 
 #
 # Stage: add SSSD support
