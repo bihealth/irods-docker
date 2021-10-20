@@ -132,9 +132,9 @@
         "irods_ssl_ca_certificate_file": "{{ IRODS_SSL_CA_CERT_PATH }}",
         {% endif %}
 
-        "irods_ssl_certificate_chain_file": "/etc/irods/server.crt",
-        "irods_ssl_certificate_key_file": "/etc/irods/server.key",
-        "irods_ssl_dh_params_file": "/etc/irods/dhparams.pem",
+        "irods_ssl_certificate_chain_file": "{{ IRODS_SSL_CERTIFICATE_CHAIN_FILE }}",
+        "irods_ssl_certificate_key_file": "{{ IRODS_SSL_CERTIFICATE_KEY_FILE }}",
+        "irods_ssl_dh_params_file": "{{ IRODS_SSL_DH_PARAMS_FILE }}",
         "irods_ssl_verify_server": "{{ IRODS_SSL_VERIFY_SERVER }}",
         "irods_transfer_buffer_size_for_parallel_transfer_in_megabytes": 4,
         "irods_user_name": "{{ IRODS_ADMIN_USER }}",
