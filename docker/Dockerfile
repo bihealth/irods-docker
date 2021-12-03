@@ -3,11 +3,10 @@
 #
 FROM centos:7 as main
 
-MAINTAINER Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>
+LABEL org.opencontainers.image.authors="Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>, Mikko Nieminen <mikko.nieminen@bih-charite.de>"
 LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
 
 # Environment variables for container runtime
-# TODO: Setup for resc-only mode
 ENV IRODS_PKG_VERSION=4.2.8-1 \
     IRODS_ROLE=provider \
     IRODS_HOST_NAME=localhost \
@@ -33,6 +32,7 @@ ENV IRODS_PKG_VERSION=4.2.8-1 \
     IRODS_CLIENT_SERVER_NEGOTIATION=off \
     IRODS_CLIENT_SERVER_POLICY=CS_NEG_REFUSE \
     IRODS_RESOURCE_DIRECTORY=/data/Vault \
+    IRODS_DEFAULT_HASH_SCHEME="SHA256" \
     IRODS_ODBC_DRIVER="PostgreSQL" \
     IRODS_ICAT_DBSERVER=postgres \
     IRODS_ICAT_DBPORT=5432 \

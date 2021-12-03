@@ -78,6 +78,7 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 | IRODS_CLIENT_SERVER_NEGOTIATION  | off                              | both       |
 | IRODS_CLIENT_SERVER_POLICY       | CS_NEG_REFUSE                    | both       |
 | IRODS_RESOURCE_DIRECTORY         | /data/Vault                      | both       |
+| IRODS_DEFAULT_HASH_SCHEME        | SHA256                           | both       |
 | IRODS_ODBC_DRIVER                | PostgreSQL                       | provider   |
 | IRODS_ICAT_DBSERVER              | postgres                         | provider   |
 | IRODS_ICAT_DBPORT                | 5432                             | provider   |
