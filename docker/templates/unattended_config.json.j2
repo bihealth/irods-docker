@@ -34,7 +34,7 @@
         "catalog_service_role": "{{ IRODS_ROLE }}",
         "default_dir_mode": "0750",
         "default_file_mode": "0600",
-        "default_hash_scheme": "{{ IRODS_DEFAULT_HASH_SCHEME|default("MD5") }}",
+        "default_hash_scheme": "{{ IRODS_DEFAULT_HASH_SCHEME }}",
         "default_resource_name": "demoResc",
         "environment_variables": {
             "IRODS_DATABASE_USER_PASSWORD_SALT": "{{ IRODS_PASSWORD_SALT }}"
@@ -111,7 +111,7 @@
         "irods_client_server_policy": "{{ IRODS_CLIENT_SERVER_POLICY }}",
         "irods_connection_pool_refresh_time_in_seconds": 300,
         "irods_cwd": "/{{ IRODS_ZONE_NAME }}/home/rods",
-        "irods_default_hash_scheme": "{{ IRODS_DEFAULT_HASH_SCHEME|default("MD5") }}",
+        "irods_default_hash_scheme": "{{ IRODS_DEFAULT_HASH_SCHEME }}",
         "irods_default_number_of_transfer_threads": 4,
         "irods_default_resource": "demoResc",
         "irods_encryption_algorithm": "AES-256-CBC",
