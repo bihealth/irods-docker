@@ -30,16 +30,20 @@ ENV IRODS_PKG_VERSION=4.2.8-1 \
     IRODS_SSL_CA_CERT_PATH= \
     IRODS_AUTHENTICATION_SCHEME=native \
     IRODS_CLIENT_SERVER_NEGOTIATION=off \
-    IRODS_CLIENT_SERVER_POLICY=CS_NEG_REFUSE \
+    IRODS_CLIENT_SERVER_POLICY=CS_NEG_REFUSE \
     IRODS_RESOURCE_DIRECTORY=/data/Vault \
     IRODS_DEFAULT_HASH_SCHEME="SHA256" \
     IRODS_ODBC_DRIVER="PostgreSQL" \
     IRODS_ICAT_DBSERVER=postgres \
     IRODS_ICAT_DBPORT=5432 \
     IRODS_ICAT_DBNAME=ICAT \
-    IRODS_ICAT_DBUSER=irods \
+    IRODS_ICAT_DBUSER=irods \
     IRODS_ICAT_DBPASS=irods \
-    IRODS_CATALOG_PROVIDER_HOST=
+    IRODS_CATALOG_PROVIDER_HOST= \
+    IRODS_SSSD_AUTH=0 \
+    IRODS_SODAR_AUTH=0 \
+    IRODS_SODAR_AUTH_VERIFY=0 \
+    IRODS_SODAR_API_HOST=https://sodar-web
 
 # Add the wait script to the image
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /usr/local/bin/wait
@@ -79,10 +83,14 @@ RUN yum -y install irods-rule-engine-plugin-python
 COPY files/irods_python-re_installer.py /
 RUN chmod +x /irods_python-re_installer.py
 
-# Copy scripts
+# Copy scripts and templates
 COPY docker-entrypoint.sh files/irods_login.sh \
-     templates/core.py.template templates/unattended_config.json.j2 files/j2-filters.py /
+     templates/core.py.template templates/unattended_config.json.j2 \
+     templates/irods.pam.j2 files/j2-filters.py /
 RUN chmod +x /docker-entrypoint.sh /irods_login.sh
+
+# Copy PAM auth
+COPY files/pam_sodar.py /usr/local/lib/pam-sodar/
 
 # Create iRODS vault dir
 RUN mkdir -p $IRODS_RESOURCE_DIRECTORY

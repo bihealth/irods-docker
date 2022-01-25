@@ -53,9 +53,9 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 
 | Variable name                    | Default Value                    | Role       |
 |----------------------------------|----------------------------------|------------|
-| IRODS_PKG_VERSION                | 4.2.8-1                          | both       |
-| IRODS_ROLE                       | provider                         | both       |
-| IRODS_HOST_NAME                  | localhost                        | both       |
+| IRODS_PKG_VERSION                | 4.2.8-1                          | both       |
+| IRODS_ROLE                       | provider                         | both       |
+| IRODS_HOST_NAME                  | localhost                        | both       |
 | IRODS_SERVICE_ACCOUNT_USER       | irods                            | both       |
 | IRODS_SERVICE_ACCOUNT_GROUP      | irods                            | both       |
 | IRODS_ADMIN_USER                 | rods                             | both       |
@@ -68,21 +68,24 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 | IRODS_CONTROL_PLANE_KEY          | TEMPORARY__32byte_ctrl_plane_key | both       |
 | IRODS_DATA_PORT_RANGE_START      | 20000                            | both       |
 | IRODS_DATA_PORT_RANGE_END        | 20199                            | both       |
-| IRODS_SSL_CERTIFICATE_CHAIN_FILE | /etc/irods/server.crt            | both       |
+| IRODS_SSL_CERTIFICATE_CHAIN_FILE | /etc/irods/server.crt            | both       |
 | IRODS_SSL_CERTIFICATE_KEY_FILE   | /etc/irods/server.key            | both       |
 | IRODS_SSL_DH_PARAMS_FILE         | /etc/irods/dhparams.pem          | both       |
-| IRODS_SSL_VERIFY_SERVER          | none                             | both       |
-| IRODS_PASSWORD_SALT              | tempsalt                         | both       |
-| IRODS_SSL_CA_CERT_PATH           |                                  | both       |
-| IRODS_AUTHENTICATION_SCHEME      | native                           | both       |
-| IRODS_CLIENT_SERVER_NEGOTIATION  | off                              | both       |
-| IRODS_CLIENT_SERVER_POLICY       | CS_NEG_REFUSE                    | both       |
+| IRODS_SSL_VERIFY_SERVER          | none                             | both       |
+| IRODS_PASSWORD_SALT              | tempsalt                         | both       |
+| IRODS_SSL_CA_CERT_PATH           |                                  | both       |
+| IRODS_AUTHENTICATION_SCHEME      | native                           | both       |
+| IRODS_CLIENT_SERVER_NEGOTIATION  | off                              | both       |
+| IRODS_CLIENT_SERVER_POLICY       | CS_NEG_REFUSE                    | both       |
 | IRODS_RESOURCE_DIRECTORY         | /data/Vault                      | both       |
-| IRODS_DEFAULT_HASH_SCHEME        | SHA256                           | both       |
+| IRODS_DEFAULT_HASH_SCHEME        | SHA256                           | both       |
 | IRODS_ODBC_DRIVER                | PostgreSQL                       | provider   |
 | IRODS_ICAT_DBSERVER              | postgres                         | provider   |
 | IRODS_ICAT_DBPORT                | 5432                             | provider   |
 | IRODS_ICAT_DBNAME                | ICAT                             | provider   |
-| IRODS_ICAT_DBUSER                | irods                            | provider   |
-| IRODS_ICAT_DBPASS                | irods                            | provider   |
+| IRODS_ICAT_DBUSER                | irods                            | provider   |
+| IRODS_ICAT_DBPASS                | irods                            | provider   |
+| IRODS_SSSD_AUTH                  | 0                                | provider   |
+| IRODS_SODAR_AUTH                 | 0                                | provider   |
+| IRODS_SODAR_AUTH_VERIFY          | 0                                | provider   |
 | IRODS_CATALOG_PROVIDER_HOST      |                                  | consumer   |

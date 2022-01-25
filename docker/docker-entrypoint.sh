@@ -67,6 +67,9 @@ if [[ "$1" == "irods-start" ]]; then
         touch /etc/irods/.provisioned
     fi
 
+    echo "Set up PAM file"
+    j2 -o /etc/pam.d/irods --undefined /irods.pam.j2
+
     find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown -c $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;
 
     # Start iRODS
