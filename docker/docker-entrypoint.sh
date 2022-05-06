@@ -1,6 +1,7 @@
 #!/bin/bash
 
 NO_WAIT=${NO_WAIT-0}
+set -euo pipefail
 
 if [[ "$1" == "irods-start" ]]; then
 
@@ -17,12 +18,8 @@ if [[ "$1" == "irods-start" ]]; then
         echo "Waiting for postgres.."
         export WAIT_HOSTS=${WAIT_HOSTS-${IRODS_ICAT_DBSERVER}:${IRODS_ICAT_DBPORT}}
         /usr/local/bin/wait
-
-        if [ -z "$DATABASE_URL" ]; then
-            PGPASSWORD=$IRODS_ICAT_DBPASS
-            PSQL="pg_isready -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT"
-        else
-            PSQL="pg_isready -d $IRODS_ICAT_DBSERVER"
+        PGPASSWORD=$IRODS_ICAT_DBPASS
+        PSQL="pg_isready -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT"
         fi
     fi
 

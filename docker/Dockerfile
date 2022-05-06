@@ -59,10 +59,7 @@ RUN yum install -y epel-release && \
     yum upgrade -y
 
 # Install dependency packages
-RUN yum install -y \
-        postgresql11 \
-        sudo \
-        nc
+RUN yum install -y postgresql11 sudo nc python-pam
 
 # Install j2cli for templating
 RUN yum -y install python-pip python-jinja2 python-yaml
