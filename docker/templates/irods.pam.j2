@@ -1,5 +1,5 @@
 {% if IRODS_SODAR_AUTH != "0" %}
-auth    sufficient  pam_python.so   /usr/local/lib/pam-sodar/pam_sodar.py
+auth    sufficient  pam_python.so /usr/local/lib/pam-sodar/pam_sodar.py
 {% endif %}
 auth    sufficient  pam_unix.so
 {% if IRODS_SSSD_AUTH != "0" %}

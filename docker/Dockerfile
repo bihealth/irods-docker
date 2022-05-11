@@ -1,13 +1,15 @@
 #
 # Stage: first / main
 #
-FROM centos:7 as main
+FROM ubuntu:18.04 as main
 
 LABEL org.opencontainers.image.authors="Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>, Mikko Nieminen <mikko.nieminen@bih-charite.de>"
 LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Environment variables for container runtime
-ENV IRODS_PKG_VERSION=4.2.8-1 \
+ENV IRODS_PKG_VERSION=4.2.11-1 \
     IRODS_ROLE=provider \
     IRODS_HOST_NAME=localhost \
     IRODS_SERVICE_ACCOUNT_USER=irods \
@@ -49,36 +51,33 @@ ENV IRODS_PKG_VERSION=4.2.8-1 \
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /usr/local/bin/wait
 RUN chmod +x /usr/local/bin/wait
 
-# Install repositories and install latest updates
-RUN yum install -y epel-release && \
-    rpm --import https://packages.irods.org/irods-signing-key.asc && \
-    curl https://packages.irods.org/renci-irods.yum.repo \
-        > /etc/yum.repos.d/renci-irods.yum.repo && \
-    yum -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
-    yum clean all && \
-    yum upgrade -y
+# Install general dependencies
+RUN apt-get update && apt-get install -y apt-utils
+RUN apt-get install -y python python-pip python-dev sudo vim wget netcat lsb-release
 
-# Install dependency packages
-RUN yum install -y postgresql11 sudo nc python-pam
-
-# Install j2cli for templating
-RUN yum -y install python-pip python-jinja2 python-yaml
-RUN pip install j2cli
+# Install database dependencies
+RUN apt-get install -y unixodbc unixodbc-dev odbc-postgresql
 
 # Install iRODS
-RUN yum -y install \
-    irods-server-${IRODS_PKG_VERSION}.x86_64.rpm \
-    irods-database-plugin-postgres \
-    irods-devel \
-  && useradd -d /var/lib/irods ${IRODS_SERVICE_ACCOUNT_USER} \
-  && yum clean all \
-  && rm -rf /var/cache/yum/* \
-  && rm -rf /tmp/*
+RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | sudo apt-key add - \
+  && echo "deb [arch=amd64] https://packages.irods.org/apt/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/renci-irods.list \
+  && apt-get update
+RUN apt-get install -y irods-server=${IRODS_PKG_VERSION}~bionic \
+    irods-database-plugin-postgres=${IRODS_PKG_VERSION}~bionic \
+    irods-dev=${IRODS_PKG_VERSION}~bionic \
+    irods-rule-engine-plugin-python
+RUN useradd -d /var/lib/irods ${IRODS_SERVICE_ACCOUNT_USER}
 
-# Install iRODS python rule-engine plugin
-RUN yum -y install irods-rule-engine-plugin-python
+# Copy rule-engine installer
 COPY files/irods_python-re_installer.py /
 RUN chmod +x /irods_python-re_installer.py
+
+# Install j2cli for templating
+RUN apt-get install -y python-jinja2 python-yaml
+RUN pip install j2cli
+
+# Install Python PAM support
+RUN apt-get install libpam-python pamtester
 
 # Copy scripts and templates
 COPY docker-entrypoint.sh files/irods_login.sh \
@@ -109,11 +108,5 @@ CMD ["irods-start"]
 
 FROM main AS sssd
 
-RUN yum install -y \
-        sssd \
-        sssd-ldap \
-        sssd-tools \
-        strace \
-  && yum clean all \
-  && rm -rf /var/cache/yum/* \
-  && rm -rf /tmp/*
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y sssd sssd-ldap sssd-tools strace
