@@ -1,20 +1,9 @@
-# Dockerized iRODs
+# Dockerized iRODS
 
-This repository contains the necessary files to build a Docker image for iRODS.
+This repository contains the necessary files to build an iRODS Docker image based on Ubuntu 18.04.
 The code is based on [hurngchunlee/docker-irods](https://github.com/hurngchunlee/docker-irods).
 
-## What's this?
-
-This is a Docker image from CUBI @bihealth that we use for our iRODS deployment.
-It is based on the great work in [hurngchunlee/docker-irods](https://github.com/hurngchunlee/docker-irods).
-We simplified things a bit and publish the results on this repository's packages as a Docker image.
-
-### SSSD Support
-
-Also, we provide the images `${VERSION}-sssd` (e.g., `latest-sssd`) that have SSSD installed.
-You will have to share `/var/lib/sss` between the SSSD container and iRODS so both containers can communicate.
-
-In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
+The image contains features specific to our [SODAR](https://github.com/bihealth/sodar-server) system, but using them is optional and the image also works as a generic iRODS server.
 
 ## Building
 
@@ -25,17 +14,15 @@ $ docker build .
 
 ## Data Persistency
 
-Each container exposes volumes for data persistency.
-The list of volumes are provided in the table below:
+Each container exposes volumes for data persistency. The list of volumes are provided in the table below:
 
 | path in container               | usage                         |
 |---------------------------------|-------------------------------|
 | /etc/irods                      | resource server configuration |
 | /var/lib/irods/iRODS/server/log | resource server log           |
 
-
-For iRODS services, the setup script (`/var/lib/irods/scripts/setup_irods.py`) is only executed when the file `/etc/irods/.provisioned` is not presented.
-The file `/etc/irods/.provisioned` is also created when the setup script is executed successfully.
+For iRODS services, the setup script (`/var/lib/irods/scripts/setup_irods.py`) is only executed when the file `/etc/irods/.provisioned` is not present.
+The file `/etc/irods/.provisioned` is created when the setup script is executed successfully.
 
 ## Commands
 
@@ -79,7 +66,7 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 | IRODS_CLIENT_SERVER_POLICY       | CS_NEG_REFUSE                    | both       |
 | IRODS_RESOURCE_DIRECTORY         | /data/Vault                      | both       |
 | IRODS_DEFAULT_HASH_SCHEME        | SHA256                           | both       |
-| IRODS_ODBC_DRIVER                | PostgreSQL                       | provider   |
+| IRODS_ODBC_DRIVER                | PostgreSQL Unicode               | provider   |
 | IRODS_ICAT_DBSERVER              | postgres                         | provider   |
 | IRODS_ICAT_DBPORT                | 5432                             | provider   |
 | IRODS_ICAT_DBNAME                | ICAT                             | provider   |
@@ -87,5 +74,19 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 | IRODS_ICAT_DBPASS                | irods                            | provider   |
 | IRODS_SSSD_AUTH                  | 0                                | provider   |
 | IRODS_SODAR_AUTH                 | 0                                | provider   |
-| IRODS_SODAR_AUTH_VERIFY          | 0                                | provider   |
 | IRODS_CATALOG_PROVIDER_HOST      |                                  | consumer   |
+
+## SSSD Support
+
+In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `latest-sssd`) which have SSSD installed.
+You will have to share `/var/lib/sss` between the SSSD container and iRODS so both containers can communicate.
+
+In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
+
+## Troubleshooting
+
+A previous version of this image was built on CentOS7 instead of Ubuntu. If updating or redeploying an existing installation, you may encounter the following error connecting to the iRODS database: `[unixODBC][Driver Manager]Data source name not found, and no default driver specified`
+
+To fix this, first edit the file `/etc/irods/server_config.json`. Find the variable `db_odbc_driver` and change its value from `PostgreSQL` to `PostgreSQL Unicode`.
+
+Next, do the same modification for the environment variable `IRODS_ODBC_DRIVER`. After restarting the image, iRODS should work normally.

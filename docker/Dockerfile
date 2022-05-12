@@ -44,7 +44,6 @@ ENV IRODS_PKG_VERSION=4.2.11-1 \
     IRODS_CATALOG_PROVIDER_HOST= \
     IRODS_SSSD_AUTH=0 \
     IRODS_SODAR_AUTH=0 \
-    IRODS_SODAR_AUTH_VERIFY=0 \
     IRODS_SODAR_API_HOST=https://sodar-web
 
 # Add the wait script to the image
