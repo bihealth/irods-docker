@@ -43,7 +43,7 @@ if [[ "$1" == "irods-start" ]]; then
         if [[ "$IRODS_ROLE" == "provider" ]]; then
             echo "Pre-create database if necessary"
             echo $IRODS_ICAT_DBPASS \
-            | createdb -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -W ICAT
+            | createdb -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -W $IRODS_ICAT_DBNAME
         fi
 
         echo "Set up unattended configuration file"
