@@ -64,6 +64,9 @@ if [[ "$1" == "irods-start" ]]; then
         touch /etc/irods/.provisioned
     fi
 
+    echo "Set up custom PAM module"
+    mkdir -p /usr/local/lib/pam-sodar
+    j2 -o /usr/local/lib/pam-sodar/pam_sodar.py --undefined /pam_sodar.py.j2
     echo "Set up PAM file"
     j2 -o /etc/pam.d/irods --undefined /irods.pam.j2
 

@@ -14,7 +14,7 @@ def pam_sm_authenticate(pamh, flags, argv):
         pamh.Message(pamh.PAM_PROMPT_ECHO_OFF, 'SODAR password: ')
     ).resp
 
-    sodar_host = os.environ.get('IRODS_SODAR_API_HOST', 'http://sodar-web:8080')
+    sodar_host = '{{ IRODS_SODAR_API_HOST }}'
     url = sodar_host + '/irodsbackend/api/auth'
 
     response = requests.post(url, auth=(pamh.user, a))

@@ -81,11 +81,8 @@ RUN apt-get install libpam-python pamtester
 # Copy scripts and templates
 COPY docker-entrypoint.sh files/irods_login.sh \
      templates/core.py.template templates/unattended_config.json.j2 \
-     templates/irods.pam.j2 files/j2-filters.py /
+     templates/irods.pam.j2 files/j2-filters.py templates/pam_sodar.py.j2 /
 RUN chmod +x /docker-entrypoint.sh /irods_login.sh
-
-# Copy PAM auth
-COPY files/pam_sodar.py /usr/local/lib/pam-sodar/
 
 # Create iRODS vault dir
 RUN mkdir -p $IRODS_RESOURCE_DIRECTORY
