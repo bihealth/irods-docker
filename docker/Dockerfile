@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Environment variables for container runtime
-ENV IRODS_PKG_VERSION=4.2.11-1 \
+ENV IRODS_PKG_VERSION=4.3.0-1 \
     IRODS_ROLE=provider \
     IRODS_HOST_NAME=localhost \
     IRODS_SERVICE_ACCOUNT_USER=irods \
