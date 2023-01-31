@@ -11,6 +11,7 @@ if [[ "$1" == "irods-start" ]]; then
 
     chmod a+x /var/lib/irods/irodsctl
     chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER /etc/irods
+    sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
 
     echo "iRODS server role: $IRODS_ROLE"
 
