@@ -52,7 +52,7 @@ RUN chmod +x /usr/local/bin/wait
 
 # Install general dependencies
 RUN apt-get update && apt-get install -y apt-utils
-RUN apt-get install -y python python-pip python-dev sudo vim wget netcat lsb-release
+RUN apt-get install -y python python-pip python-dev python3-distro sudo vim wget netcat lsb-release
 
 # Install database dependencies
 RUN apt-get install -y unixodbc unixodbc-dev odbc-postgresql
