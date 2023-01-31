@@ -50,7 +50,7 @@ if [[ "$1" == "irods-start" ]]; then
         j2 -o /unattended_config.json --undefined --filters=j2-filters.py unattended_config.json.j2
 
         echo "Perform iRODS setup"
-        python /var/lib/irods/scripts/setup_irods.py --json_configuration_file=/unattended_config.json
+        python3 /var/lib/irods/scripts/setup_irods.py --json_configuration_file=/unattended_config.json
 
         cp /var/lib/irods/.irods/irods_environment.json /etc/irods/irods_environment.json
         cp /var/lib/irods/.odbc.ini /etc/irods/.odbc.ini
