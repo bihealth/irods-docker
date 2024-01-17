@@ -78,7 +78,7 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 
 ## SSSD Support
 
-In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `latest-sssd`) which have SSSD installed.
+In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `4.2.11-1-sssd`) which have SSSD installed.
 You will have to share `/var/lib/sss` between the SSSD container and iRODS so both containers can communicate.
 
 In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
