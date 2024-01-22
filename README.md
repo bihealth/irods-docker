@@ -5,21 +5,9 @@ The code is based on [hurngchunlee/docker-irods](https://github.com/hurngchunlee
 
 The image contains features specific to our [SODAR](https://github.com/bihealth/sodar-server) system, but using them is optional and the image also works as a generic iRODS server.
 
-## Building
+Images are built and tagged for a specific iRODS release. The most recent build is tested to be compatible with iRODS version `4.3.1-0`. Our goal is to keep up with the most recent major release of iRODS. Updates for older major versions will not be made.
 
-```bash
-$ IRODS_PKG_VERSION=x.x.x-x ./build.sh
-```
-
-## Build Versions and iRODS Compatibility
-
-Images are built and tagged for a specific iRODS release. The most recent build is tested to be compatible with iRODS version `4.3.1-0`.
-
-Releases are tagged by the iRODS apt package version, followed with our own revision number starting from `1`. This means that e.g. the initial release for iRODS `4.3.1-0` will be tagged as `4.3.1-0-1`. Fixes or improvements to that release would then be published as `4.3.1-0-2`.
-
-Our goal is to keep up with the most recent major release of iRODS. Updates for older major versions will not be made.
-
-**Note:** Images built for iRODS v4.3.x are **not** compatible with iRODS v4.2 or below.
+**NOTE:** Images built for iRODS v4.3.x are **not** compatible with iRODS v4.2 or below. See below for instructions on upgrading from an older iRODS v4.2 build of this image.
 
 ## Data Persistency
 
@@ -92,6 +80,10 @@ You will have to share `/var/lib/sss` between the SSSD container and iRODS so bo
 
 In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
 
+## Upgrading From iRODS 4.2
+
+**TODO**
+
 ## Troubleshooting
 
 A previous version of this image was built on CentOS7 instead of Ubuntu. If updating or redeploying an existing installation, you may encounter the following error connecting to the iRODS database: `[unixODBC][Driver Manager]Data source name not found, and no default driver specified`
@@ -99,3 +91,13 @@ A previous version of this image was built on CentOS7 instead of Ubuntu. If upda
 To fix this, first edit the file `/etc/irods/server_config.json`. Find the variable `db_odbc_driver` and change its value from `PostgreSQL` to `PostgreSQL Unicode`.
 
 Next, do the same modification for the environment variable `IRODS_ODBC_DRIVER`. After restarting the image, iRODS should work normally.
+
+## Building (for Developers)
+
+To build the image, use the following command:
+
+```bash
+$ IRODS_PKG_VERSION=x.x.x-x BUILD_VERSION=y ./build.sh
+```
+
+Releases and images are tagged with the iRODS server version followed by our own revision number. This means that e.g. the initial release for iRODS `4.3.1-0` will be tagged as `4.3.1-0-1`. Fixes or improvements to that release would then be published as `4.3.1-0-2`.
