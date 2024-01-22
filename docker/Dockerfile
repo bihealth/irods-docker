@@ -1,7 +1,7 @@
 #
 # Stage: first / main
 #
-FROM ubuntu:18.04 as main
+FROM ubuntu:20.04 as main
 
 LABEL org.opencontainers.image.authors="Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>, Mikko Nieminen <mikko.nieminen@bih-charite.de>"
 LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Environment variables for container runtime
-ENV IRODS_PKG_VERSION=4.3.0-1 \
+ENV IRODS_PKG_VERSION=4.3.1-0 \
     IRODS_ROLE=provider \
     IRODS_HOST_NAME=localhost \
     IRODS_SERVICE_ACCOUNT_USER=irods \
@@ -52,21 +52,22 @@ RUN chmod +x /usr/local/bin/wait
 
 # Install general dependencies
 RUN apt-get update && apt-get install -y apt-utils
-RUN apt-get install -y python python-pip python-dev python3-distro sudo vim wget netcat lsb-release
+RUN apt-get install -y python3 python3-dev python3-distro python3-pip sudo vim wget netcat rsyslog
+# lsb-release g++ gnupg2
 
 # Install database dependencies
 RUN apt-get install -y unixodbc unixodbc-dev odbc-postgresql
 
 # Install iRODS Python dependencies
-RUN pip install pyodbc
+RUN pip3 install pyodbc
 
 # Install iRODS
 RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | sudo apt-key add - \
-  && echo "deb [arch=amd64] https://packages.irods.org/apt/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/renci-irods.list \
+  && echo "deb [arch=amd64] https://packages.irods.org/apt/ focal main" | sudo tee /etc/apt/sources.list.d/renci-irods.list \
   && apt-get update
-RUN apt-get install -y irods-server=${IRODS_PKG_VERSION}~bionic \
-    irods-database-plugin-postgres=${IRODS_PKG_VERSION}~bionic \
-    irods-dev=${IRODS_PKG_VERSION}~bionic \
+RUN apt-get install -y irods-server=${IRODS_PKG_VERSION}~focal \
+    irods-database-plugin-postgres=${IRODS_PKG_VERSION}~focal \
+    irods-dev=${IRODS_PKG_VERSION}~focal \
     irods-rule-engine-plugin-python
 RUN useradd -d /var/lib/irods ${IRODS_SERVICE_ACCOUNT_USER}
 
@@ -75,11 +76,11 @@ COPY files/irods_python-re_installer.py /
 RUN chmod +x /irods_python-re_installer.py
 
 # Install j2cli for templating
-RUN apt-get install -y python-jinja2 python-yaml
-RUN pip install j2cli
+RUN apt-get install -y python3-jinja2 python3-yaml
+RUN pip3 install j2cli
 
 # Install Python PAM support
-RUN apt-get install libpam-python pamtester
+RUN apt-get install -y libpam-python pamtester
 
 # Copy scripts and templates
 COPY docker-entrypoint.sh files/irods_login.sh \

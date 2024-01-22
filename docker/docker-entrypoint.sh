@@ -61,7 +61,7 @@ if [[ "$1" == "irods-start" ]]; then
         # Enable the python rule engine
         if [ -f /irods_python-re_installer.py ]; then
             echo "Enable python rule engine"
-            ./irods_python-re_installer.py
+            python3 ./irods_python-re_installer.py
         fi
 
         touch /etc/irods/.provisioned

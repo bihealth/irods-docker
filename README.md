@@ -8,9 +8,18 @@ The image contains features specific to our [SODAR](https://github.com/bihealth/
 ## Building
 
 ```bash
-$ cd docker
-$ docker build .
+$ IRODS_PKG_VERSION=x.x.x-x ./build.sh
 ```
+
+## Build Versions and iRODS Compatibility
+
+Images are built and tagged for a specific iRODS release. The most recent build is tested to be compatible with iRODS version `4.3.1-0`.
+
+Releases are tagged by the iRODS apt package version, followed with our own revision number starting from `1`. This means that e.g. the initial release for iRODS `4.3.1-0` will be tagged as ``4.3.1-0-1`. Fixes or improvements to that release would then be published as `4.3.1-0-2`.
+
+Our goal is to keep up with the most recent major release of iRODS. Updates for older major versions will not be made.
+
+**Note:** Images built for iRODS v4.3.x are **not** compatible with iRODS v4.2 or below.
 
 ## Data Persistency
 
@@ -40,7 +49,7 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 
 | Variable name                    | Default Value                    | Role       |
 |----------------------------------|----------------------------------|------------|
-| IRODS_PKG_VERSION                | 4.2.8-1                          | both       |
+| IRODS_PKG_VERSION                | 4.3.1-0                          | both       |
 | IRODS_ROLE                       | provider                         | both       |
 | IRODS_HOST_NAME                  | localhost                        | both       |
 | IRODS_SERVICE_ACCOUNT_USER       | irods                            | both       |
@@ -78,7 +87,7 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 
 ## SSSD Support
 
-In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `4.2.11-1-sssd`) which have SSSD installed.
+In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `4.3.1-0-sssd`) which have SSSD installed.
 You will have to share `/var/lib/sss` between the SSSD container and iRODS so both containers can communicate.
 
 In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
