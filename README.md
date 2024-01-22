@@ -15,7 +15,7 @@ $ IRODS_PKG_VERSION=x.x.x-x ./build.sh
 
 Images are built and tagged for a specific iRODS release. The most recent build is tested to be compatible with iRODS version `4.3.1-0`.
 
-Releases are tagged by the iRODS apt package version, followed with our own revision number starting from `1`. This means that e.g. the initial release for iRODS `4.3.1-0` will be tagged as ``4.3.1-0-1`. Fixes or improvements to that release would then be published as `4.3.1-0-2`.
+Releases are tagged by the iRODS apt package version, followed with our own revision number starting from `1`. This means that e.g. the initial release for iRODS `4.3.1-0` will be tagged as `4.3.1-0-1`. Fixes or improvements to that release would then be published as `4.3.1-0-2`.
 
 Our goal is to keep up with the most recent major release of iRODS. Updates for older major versions will not be made.
 
