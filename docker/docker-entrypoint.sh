@@ -37,6 +37,10 @@ if [[ "$1" == "irods-start" ]]; then
             cp /etc/irods/.odbc.ini /var/lib/irods/.odbc.ini
         fi
 
+        if [ -f /etc/irods/version.json ]; then
+            cp -f /etc/irods/version.json /var/lib/irods/version.json
+        fi
+
     else
 
         echo "Provisioning iRODS.."
@@ -57,6 +61,7 @@ if [[ "$1" == "irods-start" ]]; then
 
         cp /var/lib/irods/.irods/irods_environment.json /etc/irods/irods_environment.json
         cp /var/lib/irods/.odbc.ini /etc/irods/.odbc.ini
+        cp -f /var/lib/irods/version.json /etc/irods/version.json
 
         # Enable the python rule engine
         if [ -f /irods_python-re_installer.py ]; then

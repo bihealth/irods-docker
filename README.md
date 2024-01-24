@@ -13,10 +13,9 @@ Images are built and tagged for a specific iRODS release. The most recent build 
 
 Each container exposes volumes for data persistency. The list of volumes are provided in the table below:
 
-| path in container               | usage                         |
-|---------------------------------|-------------------------------|
-| /etc/irods                      | resource server configuration |
-| /var/lib/irods/iRODS/server/log | resource server log           |
+| path in container               | usage                           |
+|---------------------------------|---------------------------------|
+| /etc/irods                      | Server configuration            |
 
 For iRODS services, the setup script (`/var/lib/irods/scripts/setup_irods.py`) is only executed when the file `/etc/irods/.provisioned` is not present.
 The file `/etc/irods/.provisioned` is created when the setup script is executed successfully.
@@ -75,7 +74,7 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 
 ## SSSD Support
 
-In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `4.3.1-0-sssd`) which have SSSD installed.
+In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `4.3.1-0-1-sssd`) which have SSSD installed.
 You will have to share `/var/lib/sss` between the SSSD container and iRODS so both containers can communicate.
 
 In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
