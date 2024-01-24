@@ -46,9 +46,16 @@ if [[ "$1" == "irods-start" ]]; then
         echo "Provisioning iRODS.."
 
         if [[ "$IRODS_ROLE" == "provider" ]]; then
-            echo "Pre-create database if necessary"
-            echo $IRODS_ICAT_DBPASS \
-            | createdb -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -W $IRODS_ICAT_DBNAME
+
+            # TODO: Improve/shorten this?
+            if [ "$(PGPASSWORD=$IRODS_ICAT_DBPASS psql -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -l | grep $IRODS_ICAT_DBNAME | wc -l)" = '1' ]
+            then
+                echo "iCAT database already exists"
+            else
+                echo "Create iCAT database"
+                PGPASSWORD=$IRODS_ICAT_DBPASS createdb -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -W $IRODS_ICAT_DBNAME
+            fi
+
         fi
 
         echo "Set up unattended configuration file"
