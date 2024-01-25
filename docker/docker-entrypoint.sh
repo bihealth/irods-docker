@@ -1,6 +1,7 @@
 #!/bin/bash
 
 NO_WAIT=${NO_WAIT-0}
+export PGPASSWORD=$IRODS_ICAT_DBPASS
 set -euo pipefail
 
 if [[ "$1" == "irods-start" ]]; then
@@ -19,7 +20,6 @@ if [[ "$1" == "irods-start" ]]; then
         echo "Waiting for postgres.."
         export WAIT_HOSTS=${WAIT_HOSTS-${IRODS_ICAT_DBSERVER}:${IRODS_ICAT_DBPORT}}
         /usr/local/bin/wait
-        PGPASSWORD=$IRODS_ICAT_DBPASS
         PSQL="pg_isready -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT"
         fi
     fi
@@ -47,13 +47,12 @@ if [[ "$1" == "irods-start" ]]; then
 
         if [[ "$IRODS_ROLE" == "provider" ]]; then
 
-            # TODO: Improve/shorten this?
-            if [ "$(PGPASSWORD=$IRODS_ICAT_DBPASS psql -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -l | grep $IRODS_ICAT_DBNAME | wc -l)" = '1' ]
+            if [ "$( psql -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -XtAc "SELECT 1 FROM pg_database WHERE datname='$IRODS_ICAT_DBNAME'" )" = '1' ]
             then
-                echo "iCAT database already exists"
+                echo "iCAT database already exists, skipping creation"
             else
                 echo "Create iCAT database"
-                PGPASSWORD=$IRODS_ICAT_DBPASS createdb -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -W $IRODS_ICAT_DBNAME
+                createdb -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -W $IRODS_ICAT_DBNAME
             fi
 
         fi
