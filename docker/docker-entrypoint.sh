@@ -47,7 +47,8 @@ if [[ "$1" == "irods-start" ]]; then
 
         if [[ "$IRODS_ROLE" == "provider" ]]; then
 
-            if [ "$( psql -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -XtAc "SELECT 1 FROM pg_database WHERE datname='$IRODS_ICAT_DBNAME'" )" = '1' ]
+            if [ "$( psql -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER \
+                -XtAc "SELECT 1 FROM pg_database WHERE datname='$IRODS_ICAT_DBNAME'" )" = '1' ]
             then
                 echo "iCAT database already exists, skipping creation"
             else
