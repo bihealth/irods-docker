@@ -69,6 +69,7 @@ RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | sudo apt-key a
 RUN apt-get install -y irods-runtime=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-server=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-database-plugin-postgres=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
+    irods-icommands=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-dev=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-rule-engine-plugin-python=${IRODS_PKG_VERSION}.0${IRODS_PKG_SUFFIX}
 RUN useradd -d /var/lib/irods ${IRODS_SERVICE_ACCOUNT_USER}
