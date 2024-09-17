@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export REPO=ghcr.io/bihealth/irods-docker
-export IRODS_PKG_VERSION=${IRODS_PKG_VERSION-4.3.1-0}
+export IRODS_PKG_VERSION=${IRODS_PKG_VERSION-4.3.1}
 export BUILD_VERSION=${BUILD_VERSION-1}
 
 docker build \

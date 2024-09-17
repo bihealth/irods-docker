@@ -5,7 +5,7 @@ The code is based on [hurngchunlee/docker-irods](https://github.com/hurngchunlee
 
 The image contains features specific to our [SODAR](https://github.com/bihealth/sodar-server) system, but using them is optional and the image also works as a generic iRODS server.
 
-Images are built and tagged for a specific iRODS release. The most recent build is tested to be compatible with iRODS version `4.3.1-0`. Our goal is to keep up with the most recent major release of iRODS. Updates for older major versions will not be made.
+Images are built and tagged for a specific iRODS release. The most recent build is tested to be compatible with iRODS version `4.3.1`. Our goal is to keep up with the most recent major release of iRODS. Updates for older major versions will not be made.
 
 **NOTE:** Images built for iRODS v4.3.x are **not** compatible with iRODS v4.2 or below. See below for instructions on upgrading from an older iRODS v4.2 build of this image.
 
@@ -36,7 +36,7 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 
 | Variable name                    | Default Value                    | Role       |
 |----------------------------------|----------------------------------|------------|
-| IRODS_PKG_VERSION                | 4.3.1-0                          | both       |
+| IRODS_PKG_VERSION                | 4.3.1                            | both       |
 | IRODS_ROLE                       | provider                         | both       |
 | IRODS_HOST_NAME                  | localhost                        | both       |
 | IRODS_SERVICE_ACCOUNT_USER       | irods                            | both       |
@@ -74,7 +74,7 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 
 ## SSSD Support
 
-In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `4.3.1-0-1-sssd`) which have SSSD installed.
+In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `4.3.1-1-sssd`) which have SSSD installed.
 You will have to share `/var/lib/sss` between the SSSD container and iRODS so both containers can communicate.
 
 In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
@@ -99,4 +99,4 @@ To build the image, use the following command:
 $ IRODS_PKG_VERSION=x.x.x-x BUILD_VERSION=y ./build.sh
 ```
 
-Releases and images are tagged with the iRODS server version followed by our own revision number. This means that e.g. the initial release for iRODS `4.3.1-0` will be tagged as `4.3.1-0-1`. Fixes or improvements to that release would then be published as `4.3.1-0-2`.
+Releases and images are tagged with the iRODS server version followed by the image build version. This means that e.g. the initial release for iRODS `4.3.1` will be tagged as `4.3.1-1`. Fixes or improvements to that release would then be published as `4.3.1-2`.
