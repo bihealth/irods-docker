@@ -1,15 +1,16 @@
 #
 # Stage: first / main
 #
-FROM ubuntu:20.04 as main
+FROM ubuntu:20.04 AS main
 
 LABEL org.opencontainers.image.authors="Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>, Mikko Nieminen <mikko.nieminen@bih-charite.de>"
 LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG IRODS_PKG_SUFFIX="-0~focal"
 
 # Environment variables for container runtime
-ENV IRODS_PKG_VERSION=4.3.1-0 \
+ENV IRODS_PKG_VERSION=4.3.1 \
     IRODS_ROLE=provider \
     IRODS_HOST_NAME=localhost \
     IRODS_SERVICE_ACCOUNT_USER=irods \
@@ -65,10 +66,11 @@ RUN pip3 install pyodbc
 RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | sudo apt-key add - \
   && echo "deb [arch=amd64] https://packages.irods.org/apt/ focal main" | sudo tee /etc/apt/sources.list.d/renci-irods.list \
   && apt-get update
-RUN apt-get install -y irods-server=${IRODS_PKG_VERSION}~focal \
-    irods-database-plugin-postgres=${IRODS_PKG_VERSION}~focal \
-    irods-dev=${IRODS_PKG_VERSION}~focal \
-    irods-rule-engine-plugin-python
+RUN apt-get install -y irods-runtime=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
+    irods-server=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
+    irods-database-plugin-postgres=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
+    irods-dev=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
+    irods-rule-engine-plugin-python=${IRODS_PKG_VERSION}.0${IRODS_PKG_SUFFIX}
 RUN useradd -d /var/lib/irods ${IRODS_SERVICE_ACCOUNT_USER}
 
 # Copy rule-engine installer
