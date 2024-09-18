@@ -91,6 +91,11 @@ COPY docker-entrypoint.sh files/irods_login.sh \
      templates/irods.pam.j2 files/j2-filters.py templates/pam_sodar.py.j2 /
 RUN chmod +x /docker-entrypoint.sh /irods_login.sh
 
+# Set up logging
+COPY files/irods_syslog.conf /etc/rsyslog.d/00-irods.conf
+RUN mkdir -p /var/log/irods
+RUN chown syslog:adm /var/log/irods
+
 # Create iRODS vault dir
 RUN mkdir -p $IRODS_RESOURCE_DIRECTORY
 RUN chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY

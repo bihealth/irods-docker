@@ -14,6 +14,9 @@ if [[ "$1" == "irods-start" ]]; then
     chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER /etc/irods
     sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
 
+    # Start syslog
+    /etc/init.d/rsyslog start
+
     echo "iRODS server role: $IRODS_ROLE"
 
     if [[ "$IRODS_ROLE" == "provider" ]] && [[ "$NO_WAIT" -ne 1 ]]; then
