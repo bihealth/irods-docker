@@ -7,10 +7,12 @@ LABEL org.opencontainers.image.authors="Manuel Holtgrewe <manuel.holtgrewe@bih-c
 LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG IRODS_PKG_VERSION="4.3.3"
 ARG IRODS_PKG_SUFFIX="-0~focal"
+ARG IRODS_PYTHON_RULE_ENGINE_VERSION="4.3.3.0-0+4.3.3"
 
 # Environment variables for container runtime
-ENV IRODS_PKG_VERSION=4.3.1 \
+ENV IRODS_PKG_VERSION=$IRODS_PKG_VERSION \
     IRODS_ROLE=provider \
     IRODS_HOST_NAME=localhost \
     IRODS_SERVICE_ACCOUNT_USER=irods \
@@ -71,7 +73,7 @@ RUN apt-get install -y irods-runtime=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-database-plugin-postgres=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-icommands=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-dev=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
-    irods-rule-engine-plugin-python=${IRODS_PKG_VERSION}.0${IRODS_PKG_SUFFIX}
+    irods-rule-engine-plugin-python=${IRODS_PYTHON_RULE_ENGINE_VERSION}~focal
 RUN useradd -d /var/lib/irods ${IRODS_SERVICE_ACCOUNT_USER}
 
 # Copy rule-engine installer
