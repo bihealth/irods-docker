@@ -1,6 +1,6 @@
 # Dockerized iRODS
 
-This repository contains the necessary files to build an iRODS Docker image based on Ubuntu 18.04.
+This repository contains the necessary files to build an iRODS Docker image based on Ubuntu 20.04.
 The code is based on [hurngchunlee/docker-irods](https://github.com/hurngchunlee/docker-irods).
 
 The image contains features specific to our [SODAR](https://github.com/bihealth/sodar-server) system, but using them is optional and the image also works as a generic iRODS server.
@@ -95,8 +95,9 @@ Next, do the same modification for the environment variable `IRODS_ODBC_DRIVER`.
 
 To build the image, use the following command:
 
-```bash
-$ IRODS_PKG_VERSION=x.x.x-x BUILD_VERSION=y ./build.sh
+```
+bash
+$ IRODS_PKG_VERSION=x.x.x BUILD_VERSION=y ./build.sh
 ```
 
 Releases and images are tagged with the iRODS server version followed by the image build version. This means that e.g. the initial release for iRODS `4.3.1` will be tagged as `4.3.1-1`. Fixes or improvements to that release would then be published as `4.3.1-2`.

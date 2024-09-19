@@ -93,6 +93,8 @@ RUN chmod +x /docker-entrypoint.sh /irods_login.sh
 
 # Set up logging
 COPY files/irods_syslog.conf /etc/rsyslog.d/00-irods.conf
+COPY files/irods.logrotate /etc/logrotate.d/irods
+RUN chmod 0644 /etc/logrotate.d/irods
 RUN mkdir -p /var/log/irods
 RUN chown syslog:adm /var/log/irods
 
