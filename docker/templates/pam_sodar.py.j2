@@ -5,6 +5,9 @@ LDAP/AD server is not available.
 __author__ = 'Mikko Nieminen'
 
 import os
+import site
+# HACK to allow libpam-python to find 3rd party packages
+site.addsitedir('/usr/local/lib/python2.7/site-packages')
 import requests
 
 

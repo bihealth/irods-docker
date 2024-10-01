@@ -86,6 +86,11 @@ RUN pip3 install j2cli
 
 # Install Python PAM support
 RUN apt-get install -y libpam-python pamtester
+# NOTE: Python2 needed for custom PAM module
+RUN apt-get install -y python python-dev
+RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+RUN python2 get-pip.py
+RUN pip install requests
 
 # Copy scripts and templates
 COPY docker-entrypoint.sh files/irods_login.sh \
