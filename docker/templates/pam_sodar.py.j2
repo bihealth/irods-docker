@@ -20,7 +20,7 @@ def pam_sm_authenticate(pamh, flags, argv):
     sodar_host = '{{ IRODS_SODAR_API_HOST }}'
     url = sodar_host + '/irodsbackend/api/auth'
 
-    response = requests.post(url, auth=(pamh.user, a))
+    response = requests.get(url, auth=(pamh.user, a))
     if response.status_code == 200:
         return pamh.PAM_SUCCESS
     return pamh.PAM_AUTH_ERR
