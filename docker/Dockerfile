@@ -74,7 +74,7 @@ RUN apt-get install -y irods-runtime=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-icommands=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-dev=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-rule-engine-plugin-python=${IRODS_PYTHON_RULE_ENGINE_VERSION}~focal
-RUN useradd -d /var/lib/irods ${IRODS_SERVICE_ACCOUNT_USER}
+RUN useradd -d /var/lib/irods -s /bin/bash ${IRODS_SERVICE_ACCOUNT_USER}
 
 # Copy rule-engine installer
 COPY files/irods_python-re_installer.py /

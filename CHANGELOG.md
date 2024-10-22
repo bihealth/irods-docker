@@ -10,6 +10,7 @@
 - Enable setting `irods-rule-engine-plugin-python` version in `build.sh` (#27)
 - Add changelog (#22)
 - Change custom SODAR PAM login method from `POST` to `GET` (bihealth/sodar-server#1999)
+- Set bash as shell for `IRODS_SERVICE_ACCOUNT_USER` (#15)
 
 ## v4.2 (2024-01-19)
 
