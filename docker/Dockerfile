@@ -103,9 +103,6 @@ COPY files/irods_syslog.conf /etc/rsyslog.d/00-irods.conf
 COPY files/irods.logrotate /etc/logrotate.d/irods
 RUN chmod 0644 /etc/logrotate.d/irods
 RUN mkdir -p /var/log/irods
-RUN chown syslog:adm /var/log/irods
-RUN touch /var/log/irods/irods.log
-RUN chown syslog:adm /var/log/irods/irods.log
 
 # Create iRODS vault dir
 RUN mkdir -p $IRODS_RESOURCE_DIRECTORY
