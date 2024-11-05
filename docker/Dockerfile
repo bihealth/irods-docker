@@ -47,7 +47,8 @@ ENV IRODS_PKG_VERSION=$IRODS_PKG_VERSION \
     IRODS_CATALOG_PROVIDER_HOST= \
     IRODS_SSSD_AUTH=0 \
     IRODS_SODAR_AUTH=0 \
-    IRODS_SODAR_API_HOST=https://sodar-web
+    IRODS_SODAR_API_HOST=https://sodar-web \
+    IRODS_PASSWORD_MIN_TIME=1209600
 
 # Add the wait script to the image
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /usr/local/bin/wait

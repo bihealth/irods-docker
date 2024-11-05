@@ -71,6 +71,7 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 | IRODS_ICAT_DBPASS                | irods                            | provider   |
 | IRODS_SSSD_AUTH                  | 0                                | provider   |
 | IRODS_SODAR_AUTH                 | 0                                | provider   |
+| IRODS_PASSWORD_MIN_TIME          | 1209600                          | provider   |
 | IRODS_CATALOG_PROVIDER_HOST      |                                  | consumer   |
 
 ## SSSD Support

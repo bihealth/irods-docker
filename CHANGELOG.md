@@ -12,6 +12,8 @@
 - Change custom SODAR PAM login method from `POST` to `GET` (bihealth/sodar-server#1999)
 - Set bash as shell for `IRODS_SERVICE_ACCOUNT_USER` (#15)
 - Add `BUILD_VERSION` in `build.sh` (#23)
+- Update minimum password time configuration (#33)
+- Add `IRODS_PASSWORD_MIN_TIME` env var (#33)
 
 ## v4.2 (2024-01-19)
 
