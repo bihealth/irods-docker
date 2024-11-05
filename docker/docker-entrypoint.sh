@@ -105,9 +105,12 @@ if [[ "$1" == "irods-start" ]]; then
 
     echo "Test iinit"
     su - irods -c "/irods_login.sh ${IRODS_ADMIN_PASS}"
-    # Set minimum session timeout
-    su - irods -c "iadmin set_grid_configuration authentication password_min_time ${IRODS_PASSWORD_MIN_TIME}"
     echo "iCAT at ${IRODS_HOST_NAME} ready!"
+
+    # Set minimum session timeout
+    if [[ "$IRODS_ROLE" == "provider" ]]; then
+        su - irods -c "iadmin set_grid_configuration authentication password_min_time ${IRODS_PASSWORD_MIN_TIME}"
+    fi
 
     sleep infinity
 
