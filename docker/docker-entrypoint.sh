@@ -16,6 +16,7 @@ if [[ "$1" == "irods-start" ]]; then
     chown syslog:adm /var/log/irods
     touch /var/log/irods/irods.log
     chown syslog:adm /var/log/irods/irods.log
+    rm -f /var/run/rsyslogd.pid
     /etc/init.d/rsyslog start
 
     echo "iRODS server role: $IRODS_ROLE"
