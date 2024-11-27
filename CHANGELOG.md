@@ -6,7 +6,7 @@
 - Upgrade to PostgreSQL >11 (#18)
 - Upgrade image to Ubuntu 20.04 (#19)
 - Upgrade scripts for Python3 (#21)
-- Set up logging with syslog (#16, #34, #36)
+- Set up logging with syslog (#16, #34, #36, #37)
 - Enable setting `irods-rule-engine-plugin-python` version in `build.sh` (#27)
 - Add changelog (#22)
 - Change custom SODAR PAM login method from `POST` to `GET` (bihealth/sodar-server#1999)
