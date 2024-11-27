@@ -14,6 +14,7 @@
 - Add `BUILD_VERSION` in `build.sh` (#23)
 - Update minimum password time configuration (#33)
 - Add `IRODS_PASSWORD_MIN_TIME` env var (#33)
+- Fix SSSD package discovery (#31)
 
 ## v4.2 (2024-01-19)
 

@@ -126,4 +126,5 @@ CMD ["irods-start"]
 FROM main AS sssd
 
 ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
 RUN apt-get install -y sssd sssd-ldap sssd-tools strace
