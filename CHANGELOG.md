@@ -15,6 +15,9 @@
 - Update minimum password time configuration (#33)
 - Add `IRODS_PASSWORD_MIN_TIME` env var (#33)
 - Fix SSSD package discovery (#31)
+- Enable Python rule engine `core.py` file templating (#41)
+- Add `IRODS_CLIENT_SERVER_POLICY` in `core.py` template (#42)
+- Remove support for legacy and C++ rule engines (#43)
 
 ## v4.2 (2024-01-19)
 

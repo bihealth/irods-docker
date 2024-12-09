@@ -6,10 +6,6 @@ set -euo pipefail
 
 if [[ "$1" == "irods-start" ]]; then
 
-    if [[ ! -e /etc/irods/core.py.template ]]; then
-        cp /core.py.template /etc/irods/core.py.template
-    fi
-
     chmod a+x /var/lib/irods/irodsctl
     chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER /etc/irods
     sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
@@ -65,8 +61,10 @@ if [[ "$1" == "irods-start" ]]; then
 
         echo "Set up unattended configuration file"
         j2 -o /unattended_config.json --undefined --filters=j2-filters.py unattended_config.json.j2
-        # DEBUG
-        # cat /unattended_config.json
+
+        echo "Set up rule file for the Python rule engine"
+        j2 -o /core.py --undefined --filters=j2-filters.py core.py.j2
+        cp -f /core.py /etc/irods/core.py
 
         echo "Perform iRODS setup"
         python3 /var/lib/irods/scripts/setup_irods.py --json_configuration_file=/unattended_config.json
@@ -74,12 +72,6 @@ if [[ "$1" == "irods-start" ]]; then
         cp /var/lib/irods/.irods/irods_environment.json /etc/irods/irods_environment.json
         cp /var/lib/irods/.odbc.ini /etc/irods/.odbc.ini
         cp -f /var/lib/irods/version.json /etc/irods/version.json
-
-        # Enable the python rule engine
-        if [ -f /irods_python-re_installer.py ]; then
-            echo "Enable python rule engine"
-            python3 ./irods_python-re_installer.py
-        fi
 
         touch /etc/irods/.provisioned
     fi

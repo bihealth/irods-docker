@@ -77,15 +77,12 @@ RUN apt-get install -y irods-runtime=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-rule-engine-plugin-python=${IRODS_PYTHON_RULE_ENGINE_VERSION}~focal
 RUN useradd -d /var/lib/irods -s /bin/bash ${IRODS_SERVICE_ACCOUNT_USER}
 
-# Copy rule-engine installer
-COPY files/irods_python-re_installer.py /
-RUN chmod +x /irods_python-re_installer.py
-
 # Install j2cli for templating
 RUN apt-get install -y python3-jinja2 python3-yaml
 RUN pip3 install j2cli
 
 # Install Python PAM support
+RUN apt-get update
 RUN apt-get install -y libpam-python pamtester
 # NOTE: Python2 needed for custom PAM module
 RUN apt-get install -y python python-dev
@@ -95,7 +92,7 @@ RUN pip install requests
 
 # Copy scripts and templates
 COPY docker-entrypoint.sh files/irods_login.sh \
-     templates/core.py.template templates/unattended_config.json.j2 \
+     templates/core.py.j2 templates/unattended_config.json.j2 \
      templates/irods.pam.j2 files/j2-filters.py templates/pam_sodar.py.j2 /
 RUN chmod +x /docker-entrypoint.sh /irods_login.sh
 
