@@ -63,8 +63,7 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 | IRODS_SSL_VERIFY_SERVER          | none                             | both       |
 | IRODS_PASSWORD_SALT              | tempsalt                         | both       |
 | IRODS_SSL_CA_CERT_PATH           |                                  | both       |
-| IRODS_AUTHENTICATION_SCHEME      | native                           | both       |
-| IRODS_CLIENT_SERVER_NEGOTIATION  | off                              | both       |
+| IRODS_CLIENT_SERVER_NEGOTIATION  | request_server_negotiation       | both       |
 | IRODS_CLIENT_SERVER_POLICY       | CS_NEG_REFUSE                    | both       |
 | IRODS_RESOURCE_DIRECTORY         | /data/Vault                      | both       |
 | IRODS_DEFAULT_HASH_SCHEME        | SHA256                           | both       |

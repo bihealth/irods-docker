@@ -18,6 +18,9 @@
 - Enable Python rule engine `core.py` file templating (#41)
 - Add `IRODS_CLIENT_SERVER_POLICY` in `core.py` template (#42)
 - Remove support for legacy and C++ rule engines (#43)
+- Remove `IRODS_AUTHENTICATION_SCHEME` env var (#44)
+- Set `IRODS_CLIENT_SERVER_NEGOTIATION` default value to `request_server_negotiation` (#45)
+
 
 ## v4.2 (2024-01-19)
 
