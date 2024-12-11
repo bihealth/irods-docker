@@ -89,10 +89,16 @@ In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/
 
 ## Upgrading From iRODS 4.2
 
-**TODO**
+See [sodar-docker-compose](https://github.com/bihealth/sodar-docker-compose/) for upgrade instructions.
 
 
 ## Troubleshooting
+
+### v4.3
+
+Releases of this image for iRODS v4.3.x require PostgreSQL v12 or newer. Installations with PostgreSQL v11 no longer work.
+
+### v4.2
 
 A previous version of this image was built on CentOS7 instead of Ubuntu. If updating or redeploying an existing installation, you may encounter the following error connecting to the iRODS database: `[unixODBC][Driver Manager]Data source name not found, and no default driver specified`
 
