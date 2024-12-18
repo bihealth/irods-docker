@@ -84,6 +84,12 @@ if [[ "$1" == "irods-start" ]]; then
 
     find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;
 
+    # Generate .irodsA
+    echo "Prepare service account"
+    set +e
+    su - irods -c "echo ${IRODS_ADMIN_PASS} | iinit > /dev/null 2>&1"
+    set -e
+
     # Start iRODS
     echo "Start iRODS"
     /etc/init.d/irods start
@@ -96,15 +102,12 @@ if [[ "$1" == "irods-start" ]]; then
     done
     sleep 5
 
-    echo "Test iinit"
-    su - irods -c "/irods_login.sh ${IRODS_ADMIN_PASS}"
-    echo "iCAT at ${IRODS_HOST_NAME} ready!"
-
     # Set minimum session timeout
     if [[ "$IRODS_ROLE" == "provider" ]]; then
         su - irods -c "iadmin set_grid_configuration authentication password_min_time ${IRODS_PASSWORD_MIN_TIME}"
     fi
 
+    echo "iRODS is ready"
     sleep infinity
 
 fi
