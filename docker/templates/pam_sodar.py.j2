@@ -5,6 +5,9 @@ LDAP/AD server is not available.
 __author__ = 'Mikko Nieminen'
 
 import os
+import site
+# HACK to allow libpam-python to find 3rd party packages
+site.addsitedir('/usr/local/lib/python2.7/site-packages')
 import requests
 
 
@@ -17,7 +20,7 @@ def pam_sm_authenticate(pamh, flags, argv):
     sodar_host = '{{ IRODS_SODAR_API_HOST }}'
     url = sodar_host + '/irodsbackend/api/auth'
 
-    response = requests.post(url, auth=(pamh.user, a))
+    response = requests.get(url, auth=(pamh.user, a))
     if response.status_code == 200:
         return pamh.PAM_SUCCESS
     return pamh.PAM_AUTH_ERR
