@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v4.3.3-1 (2024-12-19)
 
 - Upgrade to iRODS v4.3.3 (#16)
 - Upgrade to PostgreSQL >11 (#18)
