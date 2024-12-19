@@ -90,10 +90,10 @@ RUN python2 get-pip.py
 RUN pip install requests
 
 # Copy scripts and templates
-COPY docker-entrypoint.sh files/irods_login.sh \
+COPY docker-entrypoint.sh \
      templates/core.py.j2 templates/unattended_config.json.j2 \
      templates/irods.pam.j2 files/j2-filters.py templates/pam_sodar.py.j2 /
-RUN chmod +x /docker-entrypoint.sh /irods_login.sh
+RUN chmod +x /docker-entrypoint.sh
 
 # Set up logging
 COPY files/irods_syslog.conf /etc/rsyslog.d/00-irods.conf
