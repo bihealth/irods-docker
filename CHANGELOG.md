@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add `IRODS_DEFAULT_RESOURCE_NAME` env var (#17)
+
+
 ## v4.3.3-1 (2024-12-19)
 
 - Upgrade to iRODS v4.3.3 (#16)
