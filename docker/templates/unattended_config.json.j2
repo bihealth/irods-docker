@@ -49,9 +49,7 @@
             "default_number_of_transfer_threads": 4,
             "default_temporary_password_lifetime_in_seconds": 120,
             "delay_rule_executors": [
-                {% if IRODS_CATALOG_PROVIDER_HOST %}
-                "{{ IRODS_CATALOG_PROVIDER_HOST }}"
-                {% else %}
+                {% if IRODS_ROLE == 'provider' %}
                 "{{ IRODS_HOST_NAME }}"
                 {% endif %}
             ],
@@ -119,6 +117,7 @@
         "negotiation_key": "{{ IRODS_NEGOTIATION_KEY }}",
         "plugin_configuration": {
             "authentication": {},
+            {% if IRODS_ROLE == 'provider' %}
             "database": {
                 "postgres": {
                     "db_host": "{{ IRODS_ICAT_DBSERVER }}",
@@ -129,6 +128,7 @@
                     "db_username": "{{ IRODS_ICAT_DBUSER }}"
                 }
             },
+            {% endif %}
             "network": {},
             "resource": {},
             "rule_engines": [

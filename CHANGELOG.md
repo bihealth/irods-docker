@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Add `IRODS_DEFAULT_RESOURCE_NAME` env var (#17)
+- Update unattended config for consumer installs (#49)
 
 
 ## v4.3.3-1 (2024-12-19)
