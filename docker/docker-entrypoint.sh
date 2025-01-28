@@ -6,8 +6,17 @@ set -euo pipefail
 
 if [[ "$1" == "irods-start" ]]; then
 
+    # Set up service user and permissions
+    groupadd -f -g $IRODS_SERVICE_ACCOUNT_GID $IRODS_SERVICE_ACCOUNT_GROUP
+    useradd -d /var/lib/irods -s /bin/bash -u $IRODS_SERVICE_ACCOUNT_UID -g $IRODS_SERVICE_ACCOUNT_GID $IRODS_SERVICE_ACCOUNT_USER || true
     chmod a+x /var/lib/irods/irodsctl
     chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER /etc/irods
+
+    # Create iRODS resource dir
+    mkdir -p $IRODS_RESOURCE_DIRECTORY
+    chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
+
+    # Set up logging
     sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
     chown syslog:adm /var/log/irods
     touch /var/log/irods/irods.log
