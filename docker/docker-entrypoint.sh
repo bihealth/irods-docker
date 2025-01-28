@@ -74,13 +74,18 @@ if [[ "$1" == "irods-start" ]]; then
         cp -f /var/lib/irods/version.json /etc/irods/version.json
 
         touch /etc/irods/.provisioned
+
     fi
 
-    echo "Set up custom PAM module"
-    mkdir -p /usr/local/lib/pam-sodar
-    j2 -o /usr/local/lib/pam-sodar/pam_sodar.py --undefined /pam_sodar.py.j2
-    echo "Set up PAM file"
-    j2 -o /etc/pam.d/irods --undefined /irods.pam.j2
+    if [[ "$IRODS_ROLE" == "provider" ]]; then
+
+        echo "Set up custom PAM module"
+        mkdir -p /usr/local/lib/pam-sodar
+        j2 -o /usr/local/lib/pam-sodar/pam_sodar.py --undefined /pam_sodar.py.j2
+        echo "Set up PAM file"
+        j2 -o /etc/pam.d/irods --undefined /irods.pam.j2
+
+    fi
 
     find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;
 
@@ -94,9 +99,9 @@ if [[ "$1" == "irods-start" ]]; then
     echo "Start iRODS"
     /etc/init.d/irods start
 
-    # Wait for iCAT port to become available
+    # Wait for iRODS server to become available
     while ! nc -w 1 $IRODS_HOST_NAME $IRODS_ZONE_PORT &> /dev/null; do
-        echo "Waiting for iCAT server ..."
+        echo "Waiting for iRODS server ..."
         /etc/init.d/irods status
         sleep 5
     done
