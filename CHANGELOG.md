@@ -6,6 +6,7 @@
 - Update unattended config for consumer installs (#49)
 - Update entrypoint to skip custom PAM module setup for consumer installs (#52)
 - Update entrypoint to clarify iRODS server wait messages (#53)
+- Add `IRODS_SERVICE_ACCOUNT_UID` and `IRODS_SERVICE_ACCOUNT_GID` env vars (#50)
 
 
 ## v4.3.3-1 (2024-12-19)

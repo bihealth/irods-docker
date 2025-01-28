@@ -17,6 +17,8 @@ ENV IRODS_PKG_VERSION=$IRODS_PKG_VERSION \
     IRODS_HOST_NAME=localhost \
     IRODS_SERVICE_ACCOUNT_USER=irods \
     IRODS_SERVICE_ACCOUNT_GROUP=irods \
+    IRODS_SERVICE_ACCOUNT_UID=1000 \
+    IRODS_SERVICE_ACCOUNT_GID=1000 \
     IRODS_ADMIN_USER=rods \
     IRODS_ADMIN_PASS=rods \
     IRODS_ZONE_NAME=demoZone \
@@ -75,7 +77,9 @@ RUN apt-get install -y irods-runtime=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-icommands=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-dev=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-rule-engine-plugin-python=${IRODS_PYTHON_RULE_ENGINE_VERSION}~focal
-RUN useradd -d /var/lib/irods -s /bin/bash ${IRODS_SERVICE_ACCOUNT_USER}
+RUN groupadd -g ${IRODS_SERVICE_ACCOUNT_GID} ${IRODS_SERVICE_ACCOUNT_GROUP}
+RUN useradd -d /var/lib/irods -s /bin/bash -u ${IRODS_SERVICE_ACCOUNT_UID} \
+    -g ${IRODS_SERVICE_ACCOUNT_GID} ${IRODS_SERVICE_ACCOUNT_USER}
 
 # Install j2cli for templating
 RUN apt-get install -y python3-jinja2 python3-yaml

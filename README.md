@@ -47,6 +47,8 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 | IRODS_HOST_NAME                  | localhost                        | both       |
 | IRODS_SERVICE_ACCOUNT_USER       | irods                            | both       |
 | IRODS_SERVICE_ACCOUNT_GROUP      | irods                            | both       |
+| IRODS_SERVICE_ACCOUNT_UID        | 1000                             | both       |
+| IRODS_SERVICE_ACCOUNT_GID        | 1000                             | both       |
 | IRODS_ADMIN_USER                 | rods                             | both       |
 | IRODS_ADMIN_PASS                 | rods                             | both       |
 | IRODS_ZONE_NAME                  | demoZone                         | both       |
