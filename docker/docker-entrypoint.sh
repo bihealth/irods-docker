@@ -43,7 +43,7 @@ if [[ "$1" == "irods-start" ]]; then
             cp /etc/irods/irods_environment.json /var/lib/irods/.irods/irods_environment.json
         fi
 
-        if [[ -f /etc/irods/.odbc.ini ] && [ ! -f /var/lib/irods/.odbc.ini ]]; then
+        if [[ -f /etc/irods/.odbc.ini ]] && [[ ! -f /var/lib/irods/.odbc.ini ]]; then
             cp /etc/irods/.odbc.ini /var/lib/irods/.odbc.ini
         fi
 
@@ -80,7 +80,7 @@ if [[ "$1" == "irods-start" ]]; then
 
         cp /var/lib/irods/.irods/irods_environment.json /etc/irods/irods_environment.json
 
-        if [ -f /var/lib/irods/.odbc.ini ]; then
+        if [[ -f /var/lib/irods/.odbc.ini ]]; then
             cp /var/lib/irods/.odbc.ini /etc/irods/.odbc.ini
         fi
         cp -f /var/lib/irods/version.json /etc/irods/version.json
@@ -89,7 +89,7 @@ if [[ "$1" == "irods-start" ]]; then
 
     fi
 
-    if [ "$IRODS_ROLE" == "provider" ]; then
+    if [[ "$IRODS_ROLE" == "provider" ]]; then
 
         echo "Set up custom PAM module"
         mkdir -p /usr/local/lib/pam-sodar
