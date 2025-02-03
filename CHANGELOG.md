@@ -8,6 +8,7 @@
 - Update entrypoint to clarify iRODS server wait messages (#53)
 - Add `IRODS_SERVICE_ACCOUNT_UID` and `IRODS_SERVICE_ACCOUNT_GID` env vars (#50)
 - Move service user and resource directory setup in entrypoint (#54)
+- Fix `.odbc.ini` file handling on resource server (#55)
 
 
 ## v4.3.3-1 (2024-12-19)
