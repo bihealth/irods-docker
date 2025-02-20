@@ -34,10 +34,13 @@ If you specify anything else then the startup script will `exec` this command (e
 
 ## Environment Variables
 
-There are several environment variables can be set for setting up iRODS.
-The variables are feeded into the iRODS setup script (`/var/lib/irods/scripts/setup_irods.py`) for the first startup.
-They are summarised below.
-iRODS can be run in either "provider" mode, which installs an iCAT catalogue server, or "consumer" mode which only installs a resource server to be used with a remote iRODS provider. The "Role" column shows for which role(s) each variable is used.
+There are several environment variables can be set for setting up iRODS. The variables are feeded into the iRODS setup script (`/var/lib/irods/scripts/setup_irods.py`) for the first startup. They are summarised below.
+
+iRODS can be run in either "provider" mode, which installs an iCAT catalogue server, or "consumer" mode which only installs a resource server to be used with a remote iRODS provider. The "role" column shows for which role(s) each variable is used.
+
+**NOTE:** Environment variables used to configure the iRODS server only take effect when initially provisioning the server. After provisioning, they will not change on the existing server without manually editing iRODS configuration files. If in doubt, see what variables are used to populate the unattended configuration file.
+
+The SSSD and SODAR auth settings, as well as the password minimum time setting, can be changed on an already provisioned server.
 
 | Variable name                    | Default Value                    | Role       |
 |----------------------------------|----------------------------------|------------|

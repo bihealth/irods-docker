@@ -1,15 +1,14 @@
 # Changelog
 
-## Unreleased
+## v4.3.3-2 (2025-02-20)
 
 - Add `IRODS_DEFAULT_RESOURCE_NAME` env var (#17)
+- Add `IRODS_SERVICE_ACCOUNT_UID` and `IRODS_SERVICE_ACCOUNT_GID` env vars (#50)
 - Update unattended config for consumer installs (#49)
 - Update entrypoint to skip custom PAM module setup for consumer installs (#52)
 - Update entrypoint to clarify iRODS server wait messages (#53)
-- Add `IRODS_SERVICE_ACCOUNT_UID` and `IRODS_SERVICE_ACCOUNT_GID` env vars (#50)
 - Move service user and resource directory setup in entrypoint (#54)
 - Fix `.odbc.ini` file handling on resource server (#55)
-
 
 ## v4.3.3-1 (2024-12-19)
 
@@ -31,7 +30,6 @@
 - Remove support for legacy and C++ rule engines (#43)
 - Remove `IRODS_AUTHENTICATION_SCHEME` env var (#44)
 - Set `IRODS_CLIENT_SERVER_NEGOTIATION` default value to `request_server_negotiation` (#45)
-
 
 ## v4.2 (2024-01-19)
 
