@@ -1,7 +1,7 @@
 {
     "admin_password": "{{ IRODS_ADMIN_PASS }}",
     "default_resource_directory": "{{ IRODS_RESOURCE_DIRECTORY }}",
-    "default_resource_name": "demoResc",
+    "default_resource_name": "{{ IRODS_DEFAULT_RESOURCE_NAME }}",
     "host_system_information": {
         "service_account_user_name": "{{ IRODS_SERVICE_ACCOUNT_USER }}",
         "service_account_group_name": "{{ IRODS_SERVICE_ACCOUNT_GROUP }}"
@@ -13,7 +13,7 @@
         "irods_cwd": "/{{ IRODS_ZONE_NAME }}/home/rods",
         "irods_default_hash_scheme": "{{ IRODS_DEFAULT_HASH_SCHEME }}",
         "irods_default_number_of_transfer_threads": 4,
-        "irods_default_resource": "demoResc",
+        "irods_default_resource": "{{ IRODS_DEFAULT_RESOURCE_NAME }}",
         "irods_encryption_algorithm": "AES-256-CBC",
         "irods_encryption_key_size": 32,
         "irods_encryption_num_hash_rounds": 16,
@@ -49,9 +49,7 @@
             "default_number_of_transfer_threads": 4,
             "default_temporary_password_lifetime_in_seconds": 120,
             "delay_rule_executors": [
-                {% if IRODS_CATALOG_PROVIDER_HOST %}
-                "{{ IRODS_CATALOG_PROVIDER_HOST }}"
-                {% else %}
+                {% if IRODS_ROLE == 'provider' %}
                 "{{ IRODS_HOST_NAME }}"
                 {% endif %}
             ],
@@ -88,7 +86,7 @@
         "default_dir_mode": "0750",
         "default_file_mode": "0600",
         "default_hash_scheme": "{{ IRODS_DEFAULT_HASH_SCHEME }}",
-        "default_resource_name": "demoResc",
+        "default_resource_name": "{{ IRODS_DEFAULT_RESOURCE_NAME }}",
         "environment_variables": {
             {# Not sure if this one is supported in 4.3? #}
             "IRODS_DATABASE_USER_PASSWORD_SALT": "{{ IRODS_PASSWORD_SALT }}"
@@ -119,6 +117,7 @@
         "negotiation_key": "{{ IRODS_NEGOTIATION_KEY }}",
         "plugin_configuration": {
             "authentication": {},
+            {% if IRODS_ROLE == 'provider' %}
             "database": {
                 "postgres": {
                     "db_host": "{{ IRODS_ICAT_DBSERVER }}",
@@ -129,6 +128,7 @@
                     "db_username": "{{ IRODS_ICAT_DBUSER }}"
                 }
             },
+            {% endif %}
             "network": {},
             "resource": {},
             "rule_engines": [

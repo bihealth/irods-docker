@@ -6,8 +6,17 @@ set -euo pipefail
 
 if [[ "$1" == "irods-start" ]]; then
 
+    # Set up service user and permissions
+    groupadd -f -g $IRODS_SERVICE_ACCOUNT_GID $IRODS_SERVICE_ACCOUNT_GROUP
+    useradd -d /var/lib/irods -s /bin/bash -u $IRODS_SERVICE_ACCOUNT_UID -g $IRODS_SERVICE_ACCOUNT_GID $IRODS_SERVICE_ACCOUNT_USER || true
     chmod a+x /var/lib/irods/irodsctl
     chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER /etc/irods
+
+    # Create iRODS resource dir
+    mkdir -p $IRODS_RESOURCE_DIRECTORY
+    chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
+
+    # Set up logging
     sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
     chown syslog:adm /var/log/irods
     touch /var/log/irods/irods.log
@@ -34,7 +43,7 @@ if [[ "$1" == "irods-start" ]]; then
             cp /etc/irods/irods_environment.json /var/lib/irods/.irods/irods_environment.json
         fi
 
-        if [ ! -f /var/lib/irods/.odbc.ini ]; then
+        if [[ -f /etc/irods/.odbc.ini ]] && [[ ! -f /var/lib/irods/.odbc.ini ]]; then
             cp /etc/irods/.odbc.ini /var/lib/irods/.odbc.ini
         fi
 
@@ -70,17 +79,25 @@ if [[ "$1" == "irods-start" ]]; then
         python3 /var/lib/irods/scripts/setup_irods.py --json_configuration_file=/unattended_config.json
 
         cp /var/lib/irods/.irods/irods_environment.json /etc/irods/irods_environment.json
-        cp /var/lib/irods/.odbc.ini /etc/irods/.odbc.ini
+
+        if [[ -f /var/lib/irods/.odbc.ini ]]; then
+            cp /var/lib/irods/.odbc.ini /etc/irods/.odbc.ini
+        fi
         cp -f /var/lib/irods/version.json /etc/irods/version.json
 
         touch /etc/irods/.provisioned
+
     fi
 
-    echo "Set up custom PAM module"
-    mkdir -p /usr/local/lib/pam-sodar
-    j2 -o /usr/local/lib/pam-sodar/pam_sodar.py --undefined /pam_sodar.py.j2
-    echo "Set up PAM file"
-    j2 -o /etc/pam.d/irods --undefined /irods.pam.j2
+    if [[ "$IRODS_ROLE" == "provider" ]]; then
+
+        echo "Set up custom PAM module"
+        mkdir -p /usr/local/lib/pam-sodar
+        j2 -o /usr/local/lib/pam-sodar/pam_sodar.py --undefined /pam_sodar.py.j2
+        echo "Set up PAM file"
+        j2 -o /etc/pam.d/irods --undefined /irods.pam.j2
+
+    fi
 
     find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;
 
@@ -94,9 +111,9 @@ if [[ "$1" == "irods-start" ]]; then
     echo "Start iRODS"
     /etc/init.d/irods start
 
-    # Wait for iCAT port to become available
+    # Wait for iRODS server to become available
     while ! nc -w 1 $IRODS_HOST_NAME $IRODS_ZONE_PORT &> /dev/null; do
-        echo "Waiting for iCAT server ..."
+        echo "Waiting for iRODS server ..."
         /etc/init.d/irods status
         sleep 5
     done
