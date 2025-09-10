@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v4.3.4-1 (2025-09-10)
 
 - Upgrade to iRODS v4.3.4 (#62)
 - Fix missing `acPostProcForParallelTransferReceived` in `core.py.j2` (#63)
