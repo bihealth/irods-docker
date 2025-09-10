@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Upgrade to iRODS v4.3.4 (#62)
+- Fix missing `acPostProcForParallelTransferReceived` in `core.py.j2` (#63)
 - Fix `LegacyKeyValueFormat` warning on build (#67)
 
 ## v4.3.3-2 (2025-02-20)
