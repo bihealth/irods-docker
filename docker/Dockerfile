@@ -4,7 +4,7 @@
 FROM ubuntu:20.04 AS main
 
 LABEL org.opencontainers.image.authors="Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>, Mikko Nieminen <mikko.nieminen@bih-charite.de>"
-LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
+LABEL org.opencontainers.image.source=https://github.com/bihealth/irods-docker
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG IRODS_PKG_VERSION="4.3.4"
