@@ -7,9 +7,9 @@ LABEL org.opencontainers.image.authors="Manuel Holtgrewe <manuel.holtgrewe@bih-c
 LABEL org.opencontainers.image.source https://github.com/bihealth/irods-docker
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG IRODS_PKG_VERSION="4.3.3"
+ARG IRODS_PKG_VERSION="4.3.4"
 ARG IRODS_PKG_SUFFIX="-0~focal"
-ARG IRODS_PYTHON_RULE_ENGINE_VERSION="4.3.3.0-0+4.3.3"
+ARG IRODS_PYTHON_RULE_ENGINE_VERSION="4.3.4.0-0+4.3.4"
 
 # Environment variables for container runtime
 ENV IRODS_PKG_VERSION=$IRODS_PKG_VERSION \
