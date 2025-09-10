@@ -7,7 +7,7 @@ The image contains features specific to our [SODAR](https://github.com/bihealth/
 
 This image uses the Python rule engine for rules. For enabling legacy or C++ engines, the user needs to provide their own rule files and add relevant changes to `server_config.json`.
 
-Images are built and tagged for a specific iRODS release. The most recent build is tested to be compatible with iRODS version `4.3.3`. Our goal is to keep up with the most recent major release of iRODS. Updates for older major versions will not be made.
+Images are built and tagged for a specific iRODS release. The most recent build is tested to be compatible with iRODS version `4.3.4`. Our goal is to keep up with the most recent stable release of iRODS. Once ugprading to a new major iRODS release, updates for older versions will not be made.
 
 **NOTE:** Images built for iRODS v4.3.x are **not** compatible with iRODS v4.2 or below. See below for instructions on upgrading from an older iRODS v4.2 build of this image.
 
@@ -44,8 +44,8 @@ The SSSD and SODAR auth settings, as well as the password minimum time setting, 
 
 | Variable name                    | Default Value                    | Role       |
 |----------------------------------|----------------------------------|------------|
-| IRODS_PKG_VERSION                | 4.3.3                            | both       |
-| IRODS_PYTHON_RULE_ENGINE_VERSION | 4.3.3.0-0+4.3.3                  | both       |
+| IRODS_PKG_VERSION                | 4.3.4                            | both       |
+| IRODS_PYTHON_RULE_ENGINE_VERSION | 4.3.4.0-0+4.3.4                  | both       |
 | IRODS_ROLE                       | provider                         | both       |
 | IRODS_HOST_NAME                  | localhost                        | both       |
 | IRODS_SERVICE_ACCOUNT_USER       | irods                            | both       |
@@ -87,7 +87,7 @@ The SSSD and SODAR auth settings, as well as the password minimum time setting, 
 
 ## SSSD Support
 
-In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `4.3.3-1-sssd`) which have SSSD installed.
+In addition to the base image, we provide the images `${VERSION}-sssd` (e.g., `4.3.4-1-sssd`) which have SSSD installed.
 You will have to share `/var/lib/sss` between the SSSD container and iRODS so both containers can communicate.
 
 In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
@@ -122,6 +122,6 @@ bash
 $ IRODS_PKG_VERSION=x.x.x IRODS_PYTHON_RULE_ENGINE_VERSION=y.y.y BUILD_VERSION=z ./build.sh
 ```
 
-Releases and images are tagged with the iRODS server version followed by the image build version. This means that e.g. the initial release for iRODS `4.3.3` will be tagged as `4.3.3-1`. Fixes or improvements to that release would then be published as `4.3.3-2`.
+Releases and images are tagged with the iRODS server version followed by the image build version. This means that e.g. the initial release for iRODS `4.3.4` will be tagged as `4.3.4-1`. Fixes or improvements to that release would then be published as `4.3.4-2`.
 
 Note that if you are providing a non-default iRODS version, you will also have to provide the `irods-rule-engine-plugin-python` version number with the `IRODS_PYTHON_RULE_ENGINE_VERSION` env var. This package does not follow the same versioning conventions as the main iRODS packages. The value is expected to be the full version name *without* the `~focal` suffix. You can find the available versions e.g. by running `apt-cache madison irods-rule-engine-plugin-python`.
