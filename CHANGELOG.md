@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Move entrypoint resource directory setup to provisioning (#71)
+
 ## v4.3.4-1 (2025-09-10)
 
 - Upgrade to iRODS v4.3.4 (#62)

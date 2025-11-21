@@ -12,10 +12,6 @@ if [[ "$1" == "irods-start" ]]; then
     chmod a+x /var/lib/irods/irodsctl
     chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER /etc/irods
 
-    # Create iRODS resource dir
-    mkdir -p $IRODS_RESOURCE_DIRECTORY
-    chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
-
     # Set up logging
     sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
     chown syslog:adm /var/log/irods
@@ -67,6 +63,10 @@ if [[ "$1" == "irods-start" ]]; then
             fi
 
         fi
+
+        echo "Create iRODS resource directory and set service account as owner"
+        mkdir -p $IRODS_RESOURCE_DIRECTORY
+        chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
 
         echo "Set up unattended configuration file"
         j2 -o /unattended_config.json --undefined --filters=j2-filters.py unattended_config.json.j2
