@@ -27,7 +27,6 @@ if [[ "$1" == "irods-start" ]]; then
         export WAIT_HOSTS=${WAIT_HOSTS-${IRODS_ICAT_DBSERVER}:${IRODS_ICAT_DBPORT}}
         /usr/local/bin/wait
         PSQL="pg_isready -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT"
-        fi
     fi
 
     if [ -f /etc/irods/.provisioned ]; then
