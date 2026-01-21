@@ -124,7 +124,7 @@ if [[ "$1" == "irods-start" ]]; then
     fi
 
     echo "iRODS is ready"
-    sleep infinity
+    exec tail -f /var/log/irods/irods.log | stdbuf -oL jq -r '[.server_timestamp, .log_level, .log_category, .log_message] | "[\(. [0])] \(. [1]) \(. [2]): \(. [3])"'
 
 fi
 
