@@ -58,7 +58,7 @@ RUN chmod +x /usr/local/bin/wait
 
 # Install general dependencies
 RUN apt-get update && apt-get install -y apt-utils
-RUN apt-get install -y python3 python3-dev python3-distro python3-pip sudo vim wget netcat rsyslog
+RUN apt-get install -y python3 python3-dev python3-distro python3-pip sudo vim wget netcat rsyslog jq
 # lsb-release g++ gnupg2
 
 # Install database dependencies
