@@ -57,7 +57,7 @@ ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait
 RUN chmod +x /usr/local/bin/wait
 
 # Install general dependencies
-RUN apt-get update && apt-get install -y apt-utils
+RUN apt-get -y update && apt-get install -y apt-utils
 RUN apt-get install -y python3 python3-dev python3-distro python3-pip sudo vim wget netcat rsyslog jq
 # lsb-release g++ gnupg2
 
@@ -70,7 +70,7 @@ RUN pip3 install pyodbc
 # Install iRODS
 RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | sudo apt-key add - \
   && echo "deb [arch=amd64] https://packages.irods.org/apt/ focal main" | sudo tee /etc/apt/sources.list.d/renci-irods.list \
-  && apt-get update
+  && apt-get -y update
 RUN apt-get install -y irods-runtime=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-server=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
     irods-database-plugin-postgres=${IRODS_PKG_VERSION}${IRODS_PKG_SUFFIX} \
@@ -83,7 +83,7 @@ RUN apt-get install -y python3-jinja2 python3-yaml
 RUN pip3 install j2cli
 
 # Install Python PAM support
-RUN apt-get update
+RUN apt-get -y update
 RUN apt-get install -y libpam-python pamtester
 # NOTE: Python2 needed for custom PAM module
 RUN apt-get install -y python python-dev
@@ -120,5 +120,5 @@ CMD ["irods-start"]
 FROM main AS sssd
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update
+RUN apt-get -y update
 RUN apt-get install -y sssd sssd-ldap sssd-tools strace

@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Move entrypoint resource directory setup to provisioning (#71)
+- Fix apt update command missing `-y` args (#77)
 
 ## v4.3.4-1 (2025-09-10)
 
