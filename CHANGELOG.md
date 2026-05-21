@@ -1,5 +1,13 @@
 # Changelog
 
+## v4.3.4-2 (2026-05-21)
+
+- Move entrypoint resource directory setup to provisioning (#71)
+- Improve logging on running container (#74)
+- Suppress `SecretsUsedInArgOrEnv` warnings (#66)
+- Fix misplaced `fi` in `docker-entrypoint.sh` (#73)
+- Fix apt update command missing `-y` args (#77)
+
 ## v4.3.4-1 (2025-09-10)
 
 - Upgrade to iRODS v4.3.4 (#62)

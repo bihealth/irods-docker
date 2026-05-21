@@ -12,10 +12,6 @@ if [[ "$1" == "irods-start" ]]; then
     chmod a+x /var/lib/irods/irodsctl
     chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER /etc/irods
 
-    # Create iRODS resource dir
-    mkdir -p $IRODS_RESOURCE_DIRECTORY
-    chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
-
     # Set up logging
     sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
     chown syslog:adm /var/log/irods
@@ -31,7 +27,6 @@ if [[ "$1" == "irods-start" ]]; then
         export WAIT_HOSTS=${WAIT_HOSTS-${IRODS_ICAT_DBSERVER}:${IRODS_ICAT_DBPORT}}
         /usr/local/bin/wait
         PSQL="pg_isready -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT"
-        fi
     fi
 
     if [ -f /etc/irods/.provisioned ]; then
@@ -67,6 +62,10 @@ if [[ "$1" == "irods-start" ]]; then
             fi
 
         fi
+
+        echo "Create iRODS resource directory and set service account as owner"
+        mkdir -p $IRODS_RESOURCE_DIRECTORY
+        chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
 
         echo "Set up unattended configuration file"
         j2 -o /unattended_config.json --undefined --filters=j2-filters.py unattended_config.json.j2
@@ -125,7 +124,7 @@ if [[ "$1" == "irods-start" ]]; then
     fi
 
     echo "iRODS is ready"
-    sleep infinity
+    exec tail -f /var/log/irods/irods.log | jq --unbuffered -r '[.server_timestamp, .log_level, .log_category, .log_message] | "[\(. [0])] \(. [1]) \(. [2]): \(. [3])"'
 
 fi
 
