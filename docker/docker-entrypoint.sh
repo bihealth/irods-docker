@@ -124,8 +124,20 @@ if [[ "$1" == "irods-start" ]]; then
     fi
 
     echo "iRODS is ready"
-    exec tail -f /var/log/irods/irods.log | jq --unbuffered -r '[.server_timestamp, .log_level, .log_category, .log_message] | "[\(. [0])] \(. [1]) \(. [2]): \(. [3])"'
 
+    set +e
+    set +o pipefail
+
+    JQ_FILTER_FILE=$(mktemp)
+    cat <<'EOF' > "$JQ_FILTER_FILE"
+try fromjson catch null
+| select(. != null)
+| "[\(.server_timestamp)] \(.log_level) \(.log_category): \(.log_message)"
+EOF
+
+    exec tail -F /var/log/irods/irods.log | jq -R --unbuffered -f "$JQ_FILTER_FILE"
+
+    rm "$JQ_FILTER_FILE"
 fi
 
 exec "$@"
