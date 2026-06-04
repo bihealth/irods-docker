@@ -128,16 +128,9 @@ if [[ "$1" == "irods-start" ]]; then
     set +e
     set +o pipefail
 
-    JQ_FILTER_FILE=$(mktemp)
-    cat <<'EOF' > "$JQ_FILTER_FILE"
-try fromjson catch null
-| select(. != null)
-| "[\(.server_timestamp)] \(.log_level) \(.log_category): \(.log_message)"
-EOF
+    JQ_FILTER='try fromjson catch null | select(. != null) | "[\(.server_timestamp)] \(.log_level) \(.log_category): \(.log_message)"'
 
-    exec tail -F /var/log/irods/irods.log | jq -R --unbuffered -f "$JQ_FILTER_FILE"
-
-    rm "$JQ_FILTER_FILE"
+    exec tail -F /var/log/irods/irods.log | jq -R --unbuffered -r "$JQ_FILTER"
 fi
 
 exec "$@"
