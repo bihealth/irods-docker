@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.3.5-1 (2026-07-27)
+
+- Upgrade to iRODS v4.3.5 (#76)
+- Fix iRODS log streaming error causing container restart (#79)
+
 ## v4.3.4-2 (2026-05-21)
 
 - Move entrypoint resource directory setup to provisioning (#71)
