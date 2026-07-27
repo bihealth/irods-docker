@@ -5,13 +5,13 @@
 #
 FROM ubuntu:20.04 AS main
 
-LABEL org.opencontainers.image.authors="Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>, Mikko Nieminen <mikko.nieminen@bih-charite.de>, Oliver Stolpe <oliver.stolpe@charite.de>"
+LABEL org.opencontainers.image.authors="Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>, Mikko Nieminen <mikko.nieminen@bih-charite.de>, Oliver Stolpe <oliver.stolpe@charite.de>, Federico Marotta <federico.marotta@bih-charite.de>"
 LABEL org.opencontainers.image.source=https://github.com/bihealth/irods-docker
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG IRODS_PKG_VERSION="4.3.4"
+ARG IRODS_PKG_VERSION="4.3.5"
 ARG IRODS_PKG_SUFFIX="-0~focal"
-ARG IRODS_PYTHON_RULE_ENGINE_VERSION="4.3.4.0-0+4.3.4"
+ARG IRODS_PYTHON_RULE_ENGINE_VERSION="4.3.5.0-0+4.3.5"
 
 # Environment variables for container runtime
 ENV IRODS_PKG_VERSION=$IRODS_PKG_VERSION \
