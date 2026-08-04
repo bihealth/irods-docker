@@ -1,7 +1,11 @@
+# file: /etc/logrotate.d/irods
+
 /var/log/irods/irods.log {
     weekly
     rotate 26
     copytruncate
+    delaycompress
+    compress
     dateext
     notifempty
     missingok

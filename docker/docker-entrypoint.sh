@@ -9,16 +9,15 @@ if [[ "$1" == "irods-start" ]]; then
     # Set up service user and permissions
     groupadd -f -g $IRODS_SERVICE_ACCOUNT_GID $IRODS_SERVICE_ACCOUNT_GROUP
     useradd -d /var/lib/irods -s /bin/bash -u $IRODS_SERVICE_ACCOUNT_UID -g $IRODS_SERVICE_ACCOUNT_GID $IRODS_SERVICE_ACCOUNT_USER || true
-    chmod a+x /var/lib/irods/irodsctl
     chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER /etc/irods
 
-    # Set up logging
-    sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
-    chown syslog:adm /var/log/irods
-    touch /var/log/irods/irods.log
-    chown syslog:adm /var/log/irods/irods.log
-    rm -f /var/run/rsyslogd.pid
-    /etc/init.d/rsyslog start
+    # # Set up logging (done at image build time)
+    # sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
+    # chown syslog:adm /var/log/irods
+    # touch /var/log/irods/irods.log
+    # chown syslog:adm /var/log/irods/irods.log
+    # rm -f /var/run/rsyslogd.pid
+    # /etc/init.d/rsyslog start
 
     echo "iRODS server role: $IRODS_ROLE"
 
@@ -26,7 +25,6 @@ if [[ "$1" == "irods-start" ]]; then
         echo "Waiting for postgres.."
         export WAIT_HOSTS=${WAIT_HOSTS-${IRODS_ICAT_DBSERVER}:${IRODS_ICAT_DBPORT}}
         /usr/local/bin/wait
-        PSQL="pg_isready -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT"
     fi
 
     if [ -f /etc/irods/.provisioned ]; then
@@ -38,7 +36,7 @@ if [[ "$1" == "irods-start" ]]; then
             cp /etc/irods/irods_environment.json /var/lib/irods/.irods/irods_environment.json
         fi
 
-        if [[ -f /etc/irods/.odbc.ini ]] && [[ ! -f /var/lib/irods/.odbc.ini ]]; then
+        if [ -f /etc/irods/.odbc.ini ] && [ ! -f /var/lib/irods/.odbc.ini ]; then
             cp /etc/irods/.odbc.ini /var/lib/irods/.odbc.ini
         fi
 
@@ -58,30 +56,36 @@ if [[ "$1" == "irods-start" ]]; then
                 echo "iCAT database already exists, skipping creation"
             else
                 echo "Create iCAT database"
-                createdb -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER -W $IRODS_ICAT_DBNAME
+                createdb -h $IRODS_ICAT_DBSERVER -p $IRODS_ICAT_DBPORT -U $IRODS_ICAT_DBUSER $IRODS_ICAT_DBNAME
             fi
 
         fi
 
-        echo "Create iRODS resource directory and set service account as owner"
-        mkdir -p $IRODS_RESOURCE_DIRECTORY
-        chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
+        # This is done by the setup script
+        # echo "Create iRODS resource directory and set service account as owner"
+        # mkdir -p $IRODS_RESOURCE_DIRECTORY
+        # chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
 
-        echo "Set up unattended configuration file"
-        j2 -o /unattended_config.json --undefined --filters=j2-filters.py unattended_config.json.j2
+        # For v5.1
+        # if [ ! -f $IRODS_SSL_CERTIFICATE_CHAIN_FILE ] || \
+        #    [ ! -f $IRODS_SSL_CERTIFICATE_KEY_FILE ] || \
+        #    [ ! -f $IRODS_SSL_DH_PARAMS_FILE ]; then
+        #     echo "Missing TLS files, iRODS cannot be set up."
+        #     exit 1
+        # fi
 
-        echo "Set up rule file for the Python rule engine"
-        j2 -o /core.py --undefined --filters=j2-filters.py core.py.j2
-        cp -f /core.py /etc/irods/core.py
+        echo "Set up unattended configuration file and rule file for the Python rule engine"
+        python3 /scripts/generate_server_config.py
 
         echo "Perform iRODS setup"
-        python3 /var/lib/irods/scripts/setup_irods.py --json_configuration_file=/unattended_config.json
+        python3 /var/lib/irods/scripts/setup_irods.py --json_configuration_file=/tmp/unattended_config.json
 
         cp /var/lib/irods/.irods/irods_environment.json /etc/irods/irods_environment.json
 
-        if [[ -f /var/lib/irods/.odbc.ini ]]; then
+        if [ -f /var/lib/irods/.odbc.ini ]; then
             cp /var/lib/irods/.odbc.ini /etc/irods/.odbc.ini
         fi
+
         cp -f /var/lib/irods/version.json /etc/irods/version.json
 
         touch /etc/irods/.provisioned
@@ -89,31 +93,30 @@ if [[ "$1" == "irods-start" ]]; then
     fi
 
     if [[ "$IRODS_ROLE" == "provider" ]]; then
-
         echo "Set up custom PAM module"
-        mkdir -p /usr/local/lib/pam-sodar
-        j2 -o /usr/local/lib/pam-sodar/pam_sodar.py --undefined /pam_sodar.py.j2
-        echo "Set up PAM file"
-        j2 -o /etc/pam.d/irods --undefined /irods.pam.j2
-
+        python3 /scripts/generate_auth_config.py
     fi
 
-    find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;
+    # The setup script should do this
+    # find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;
 
-    # Generate .irodsA
-    echo "Prepare service account"
-    set +e
-    su - irods -c "echo ${IRODS_ADMIN_PASS} | iinit > /dev/null 2>&1"
-    set -e
+    # Start the cron daemon (required by logrotate)
+    cron
+
+    # Start the rsyslog daemon (see /var/log/irods/irods.log)
+    rsyslogd -iNONE
 
     # Start iRODS
     echo "Start iRODS"
-    /etc/init.d/irods start
+    su - irods -c "irodsServer -d"
+
+    # Generate .irodsA (must be done after the server is running)
+    echo "Prepare service account"
+    su - irods -c "echo \"${IRODS_ADMIN_PASS}\" | iinit"
 
     # Wait for iRODS server to become available
     while ! nc -w 1 $IRODS_HOST_NAME $IRODS_ZONE_PORT &> /dev/null; do
         echo "Waiting for iRODS server ..."
-        /etc/init.d/irods status
         sleep 5
     done
     sleep 5
