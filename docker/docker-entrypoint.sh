@@ -11,13 +11,10 @@ if [[ "$1" == "irods-start" ]]; then
     useradd -d /var/lib/irods -s /bin/bash -u $IRODS_SERVICE_ACCOUNT_UID -g $IRODS_SERVICE_ACCOUNT_GID $IRODS_SERVICE_ACCOUNT_USER || true
     chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER /etc/irods
 
-    # # Set up logging (done at image build time)
-    # sed -i '/imklog/s/^/#/' /etc/rsyslog.conf
-    # chown syslog:adm /var/log/irods
-    # touch /var/log/irods/irods.log
-    # chown syslog:adm /var/log/irods/irods.log
-    # rm -f /var/run/rsyslogd.pid
-    # /etc/init.d/rsyslog start
+    # Set up log file
+    mkdir -p /var/log/irods
+    touch /var/log/irods/irods.log
+    chown -R syslog:adm /var/log/irods
 
     echo "iRODS server role: $IRODS_ROLE"
 
@@ -61,18 +58,9 @@ if [[ "$1" == "irods-start" ]]; then
 
         fi
 
-        # This is done by the setup script
-        # echo "Create iRODS resource directory and set service account as owner"
-        # mkdir -p $IRODS_RESOURCE_DIRECTORY
-        # chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
-
-        # For v5.1
-        # if [ ! -f $IRODS_SSL_CERTIFICATE_CHAIN_FILE ] || \
-        #    [ ! -f $IRODS_SSL_CERTIFICATE_KEY_FILE ] || \
-        #    [ ! -f $IRODS_SSL_DH_PARAMS_FILE ]; then
-        #     echo "Missing TLS files, iRODS cannot be set up."
-        #     exit 1
-        # fi
+        echo "Create iRODS resource directory and set service account as owner"
+        mkdir -p $IRODS_RESOURCE_DIRECTORY
+        chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
 
         echo "Set up unattended configuration file and rule file for the Python rule engine"
         python3 /scripts/generate_server_config.py
@@ -97,8 +85,7 @@ if [[ "$1" == "irods-start" ]]; then
         python3 /scripts/generate_auth_config.py
     fi
 
-    # The setup script should do this
-    # find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;
+    find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;
 
     # Start the cron daemon (required by logrotate)
     cron
@@ -108,18 +95,19 @@ if [[ "$1" == "irods-start" ]]; then
 
     # Start iRODS
     echo "Start iRODS"
-    su - irods -c "irodsServer -d"
-
-    # Generate .irodsA (must be done after the server is running)
-    echo "Prepare service account"
-    su - irods -c "echo \"${IRODS_ADMIN_PASS}\" | iinit"
+    /etc/init.d/irods start
 
     # Wait for iRODS server to become available
     while ! nc -w 1 $IRODS_HOST_NAME $IRODS_ZONE_PORT &> /dev/null; do
         echo "Waiting for iRODS server ..."
+        /etc/init.d/irods status
         sleep 5
     done
     sleep 5
+
+    # Generate .irodsA (must be done after the server is running)
+    echo "Prepare service account"
+    su - irods -c "echo \"${IRODS_ADMIN_PASS}\" | iinit"
 
     # Set minimum session timeout
     if [[ "$IRODS_ROLE" == "provider" ]]; then

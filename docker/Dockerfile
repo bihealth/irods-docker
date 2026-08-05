@@ -66,7 +66,7 @@ RUN apt update && \
         wget \
         gpg \
         jq \
-        netcat-traditional \
+        netcat-openbsd \
         python3-jinja2 \
         python3-requests
 
@@ -106,7 +106,9 @@ RUN apt update && \
         irods-resource-plugin-s3=${IRODS_RESOURCE_PLUGIN_S3_VERSION}${IRODS_PLUGIN_SUFFIX}
 
 # Add configuration files and templates
-COPY docker-entrypoint.sh templates /
+COPY docker-entrypoint.sh /
+COPY templates /templates
+COPY scripts /scripts
 COPY files/rsyslog.conf /etc/rsyslog.conf
 COPY files/irods_syslog.conf /etc/rsyslog.d/00-irods.conf
 COPY files/irods.logrotate /etc/logrotate.d/irods

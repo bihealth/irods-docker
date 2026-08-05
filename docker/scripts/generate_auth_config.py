@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from configure_server import render
+from generate_server_config import render
 
 if __name__ == '__main__':
     render(
