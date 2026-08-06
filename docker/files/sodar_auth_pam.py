@@ -16,7 +16,6 @@
 import argparse
 import os
 import requests
-import sys
 
 parser = argparse.ArgumentParser(
     description='Authenticate a user against SODAR through pam_exec.'

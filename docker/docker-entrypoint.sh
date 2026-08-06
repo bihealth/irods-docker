@@ -62,11 +62,15 @@ if [[ "$1" == "irods-start" ]]; then
         mkdir -p $IRODS_RESOURCE_DIRECTORY
         chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
 
-        echo "Set up unattended configuration file and rule file for the Python rule engine"
-        python3 /scripts/generate_server_config.py
+        echo "Set up unattended configuration file"
+        IRODS_HOST_NAME=$(hostname) j2 -o /unattended_config.json unattended_config.json.j2
+
+        echo "Set up rule file for the Python rule engine"
+        j2 -o /core.py --undefined core.py.j2
+        cp -f /core.py /etc/irods/core.py
 
         echo "Perform iRODS setup"
-        python3 /var/lib/irods/scripts/setup_irods.py --json_configuration_file=/tmp/unattended_config.json
+        python3 /var/lib/irods/scripts/setup_irods.py --json_configuration_file=/unattended_config.json
 
         cp /var/lib/irods/.irods/irods_environment.json /etc/irods/irods_environment.json
 
@@ -82,7 +86,7 @@ if [[ "$1" == "irods-start" ]]; then
 
     if [[ "$IRODS_ROLE" == "provider" ]]; then
         echo "Set up custom PAM module"
-        python3 /scripts/generate_auth_config.py
+        j2 -o /etc/pam.d/irods /irods.pam.j2
     fi
 
     find /var/lib/irods -not -path '/var/lib/irods/Vault*' -exec chown $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER {} \;

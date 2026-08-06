@@ -3,13 +3,13 @@
 #
 # Stage: first / main
 #
-FROM ubuntu:22.04 AS main
+FROM ubuntu:24.04 AS main
 
 LABEL org.opencontainers.image.authors="Manuel Holtgrewe <manuel.holtgrewe@bih-charite.de>, Mikko Nieminen <mikko.nieminen@bih-charite.de>, Oliver Stolpe <oliver.stolpe@charite.de>, Federico Marotta <federico.marotta@bih-charite.de>"
 LABEL org.opencontainers.image.source=https://github.com/bihealth/irods-docker
 
 ARG DEBIAN_FRONTEND="noninteractive"
-ARG UBUNTU_VERSION_NAME="jammy"
+ARG UBUNTU_VERSION_NAME="noble"
 ARG IRODS_PKG_VERSION="4.3.5"
 ARG IRODS_PYTHON_RULE_ENGINE_VERSION="4.3.5"
 ARG IRODS_RESOURCE_PLUGIN_S3_VERSION="4.3.5"
@@ -60,14 +60,19 @@ ENV IRODS_PKG_VERSION=$IRODS_PKG_VERSION \
 # Add the wait script to the image
 ADD --chmod=+x https://github.com/ufoscout/docker-compose-wait/releases/download/2.12.1/wait /usr/local/bin/wait
 
+# Remove default ubuntu user
+# https://bugs.launchpad.net/cloud-images/+bug/2005129
+RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu
+
 # Install general dependencies
 RUN apt update && \
     apt install -y \
         wget \
         gpg \
         jq \
+        j2cli \
+        vim \
         netcat-openbsd \
-        python3-jinja2 \
         python3-requests
 
 # Install database dependencies
@@ -107,12 +112,14 @@ RUN apt update && \
 
 # Add configuration files and templates
 COPY docker-entrypoint.sh /
-COPY templates /templates
-COPY scripts /scripts
+COPY templates/ /
 COPY files/rsyslog.conf /etc/rsyslog.conf
 COPY files/irods_syslog.conf /etc/rsyslog.d/00-irods.conf
 COPY files/irods.logrotate /etc/logrotate.d/irods
 COPY files/sodar_auth_pam.py /var/lib/irods/sodar_auth_pam.py
+
+# Data volumes
+VOLUME "/etc/irods"
 
 # Entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]
