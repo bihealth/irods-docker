@@ -98,7 +98,7 @@ if [[ "$1" == "irods-start" ]]; then
     rsyslogd -iNONE
 
     # Start iRODS
-    echo "Start iRODS"
+    echo "Start iRODS v$IRODS_PKG_VERSION"
     /etc/init.d/irods start
 
     # Wait for iRODS server to become available
@@ -115,6 +115,7 @@ if [[ "$1" == "irods-start" ]]; then
 
     # Set minimum session timeout
     if [[ "$IRODS_ROLE" == "provider" ]]; then
+        echo "Updating minimum session timeout"
         su - irods -c "iadmin set_grid_configuration authentication password_min_time ${IRODS_PASSWORD_MIN_TIME}"
     fi
 
