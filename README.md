@@ -1,6 +1,6 @@
 # Dockerized iRODS
 
-This repository contains the necessary files to build an iRODS Docker image based on Ubuntu 20.04.
+This repository contains the necessary files to build an iRODS Docker image based on Ubuntu 24.04.
 The code is based on [hurngchunlee/docker-irods](https://github.com/hurngchunlee/docker-irods).
 
 The image contains features specific to our [SODAR](https://github.com/bihealth/sodar-server) system, but using them is optional and the image also works as a generic iRODS server.
@@ -45,9 +45,9 @@ The SSSD and SODAR auth settings, as well as the password minimum time setting, 
 | Variable name                    | Default Value                    | Role       |
 |----------------------------------|----------------------------------|------------|
 | IRODS_PKG_VERSION                | 4.3.5                            | both       |
-| IRODS_PYTHON_RULE_ENGINE_VERSION | 4.3.5.0-0+4.3.5                  | both       |
+| IRODS_PYTHON_RULE_ENGINE_VERSION | 4.3.5.0                          | both       |
+| IRODS_RESOURCE_PLUGIN_S3_VERSION | 4.3.5.0                          | both       |
 | IRODS_ROLE                       | provider                         | both       |
-| IRODS_HOST_NAME                  | localhost                        | both       |
 | IRODS_SERVICE_ACCOUNT_USER       | irods                            | both       |
 | IRODS_SERVICE_ACCOUNT_GROUP      | irods                            | both       |
 | IRODS_SERVICE_ACCOUNT_UID        | 1000                             | both       |
@@ -67,12 +67,13 @@ The SSSD and SODAR auth settings, as well as the password minimum time setting, 
 | IRODS_SSL_DH_PARAMS_FILE         | /etc/irods/dhparams.pem          | both       |
 | IRODS_SSL_VERIFY_SERVER          | none                             | both       |
 | IRODS_PASSWORD_SALT              | tempsalt                         | both       |
-| IRODS_SSL_CA_CERT_PATH           |                                  | both       |
+| IRODS_SSL_CA_CERTIFICATE_PATH    |                                  | both       |
 | IRODS_CLIENT_SERVER_NEGOTIATION  | request_server_negotiation       | both       |
 | IRODS_CLIENT_SERVER_POLICY       | CS_NEG_REFUSE                    | both       |
 | IRODS_DEFAULT_RESOURCE_NAME      | demoResc                         | both       |
 | IRODS_RESOURCE_DIRECTORY         | /data/Vault                      | both       |
 | IRODS_DEFAULT_HASH_SCHEME        | SHA256                           | both       |
+| IRODS_LOG_LEVEL                  | info                             | both       |
 | IRODS_ODBC_DRIVER                | PostgreSQL Unicode               | provider   |
 | IRODS_ICAT_DBSERVER              | postgres                         | provider   |
 | IRODS_ICAT_DBPORT                | 5432                             | provider   |
@@ -93,7 +94,17 @@ You will have to share `/var/lib/sss` between the SSSD container and iRODS so bo
 In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
 
 
-## Upgrading From iRODS 4.2
+## Upgrading
+
+### Upgrading To 4.3.5-2
+
+Breaking changes occurred between 4.3.5-1 and 4.3.5-2.
+
+- The variable `IRODS_SSL_CA_CERT_FILE` was renamed to `IRODS_SSL_CA_CERTIFICATE_FILE` to align with the corresponding iRODS variable name.
+- The variable `IRODS_HOST_NAME` is no longer used.
+- The variable `IRODS_LOG_LEVEL` was added.
+
+### Upgrading From iRODS 4.2
 
 See [sodar-docker-compose](https://github.com/bihealth/sodar-docker-compose/) for upgrade instructions.
 
@@ -124,4 +135,4 @@ $ IRODS_PKG_VERSION=x.x.x IRODS_PYTHON_RULE_ENGINE_VERSION=y.y.y BUILD_VERSION=z
 
 Releases and images are tagged with the iRODS server version followed by the image build version. This means that e.g. the initial release for iRODS `4.3.5` will be tagged as `4.3.5-1`. Fixes or improvements to that release would then be published as `4.3.5-2`.
 
-Note that if you are providing a non-default iRODS version, you will also have to provide the `irods-rule-engine-plugin-python` version number with the `IRODS_PYTHON_RULE_ENGINE_VERSION` env var. This package does not follow the same versioning conventions as the main iRODS packages. The value is expected to be the full version name *without* the `~focal` suffix. You can find the available versions e.g. by running `apt-cache madison irods-rule-engine-plugin-python`.
+Note that if you are providing a non-default iRODS version, you will also have to provide the `irods-rule-engine-plugin-python` and `irods-resource-plugin-s3` version numbers with the `IRODS_PYTHON_RULE_ENGINE_VERSION` and `IRODS_RESOURCE_PLUGIN_S3_VERSION` env vars, respectively. These packages do not follow the same versioning conventions as the main iRODS packages. The full version includes the plugin version, a build suffix (typically `-0`), the iRODS version used during the build (e.g. `+4.3.5`), and an OS-dependent suffix (e.g. `~focal`). If you provide these env vars, the value is expected to be just the plugin version name without any suffix. You can find the available versions e.g. by running `apt-cache madison irods-rule-engine-plugin-python`.
