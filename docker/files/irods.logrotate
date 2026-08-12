@@ -4,8 +4,6 @@
     weekly
     rotate 26
     copytruncate
-    delaycompress
-    compress
     dateext
     notifempty
     missingok
