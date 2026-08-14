@@ -63,7 +63,7 @@ if [[ "$1" == "irods-start" ]]; then
         chown -cR $IRODS_SERVICE_ACCOUNT_GROUP:$IRODS_SERVICE_ACCOUNT_USER $IRODS_RESOURCE_DIRECTORY
 
         echo "Set up unattended configuration file"
-        IRODS_HOST_NAME=$(hostname) j2 -o /unattended_config.json unattended_config.json.j2
+        j2 -o /unattended_config.json unattended_config.json.j2
 
         echo "Set up rule file for the Python rule engine"
         j2 -o /core.py --undefined core.py.j2

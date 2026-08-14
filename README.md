@@ -48,6 +48,7 @@ The SSSD and SODAR auth settings, as well as the password minimum time setting, 
 | IRODS_PYTHON_RULE_ENGINE_VERSION | 4.3.5.0                          | both       |
 | IRODS_RESOURCE_PLUGIN_S3_VERSION | 4.3.5.0                          | both       |
 | IRODS_ROLE                       | provider                         | both       |
+| IRODS_HOST_NAME                  | localhost                        | both       |
 | IRODS_SERVICE_ACCOUNT_USER       | irods                            | both       |
 | IRODS_SERVICE_ACCOUNT_GROUP      | irods                            | both       |
 | IRODS_SERVICE_ACCOUNT_UID        | 1000                             | both       |
@@ -101,7 +102,6 @@ In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/
 Breaking changes occurred between 4.3.5-1 and 4.3.5-2.
 
 - The variable `IRODS_SSL_CA_CERT_FILE` was renamed to `IRODS_SSL_CA_CERTIFICATE_FILE` to align with the corresponding iRODS variable name.
-- The variable `IRODS_HOST_NAME` is no longer used.
 - The variable `IRODS_LOG_LEVEL` was added.
 
 ### Upgrading From iRODS 4.2
