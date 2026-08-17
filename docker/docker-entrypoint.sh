@@ -97,6 +97,15 @@ if [[ "$1" == "irods-start" ]]; then
     # Start the rsyslog daemon (see /var/log/irods/irods.log)
     rsyslogd -iNONE
 
+    # Generate .irodsA by running iinit. Although the command will fail because
+    # the server is not running, we expect it to create the .irodsA file and to
+    # print an error message that says "Saved password [...]". If the .irodsA is
+    # not detected, the script will exit immediately. Generating .irodsA must be
+    # done before starting the server, otherwise the first iinit after starting
+    # the server will time-out.
+    echo "Prepare service account"
+    su - irods -c "echo \"${IRODS_ADMIN_PASS}\" | iinit > /dev/null 2>&1" || test -f /var/lib/irods/.irods/.irodsA
+
     # Start iRODS
     echo "Start iRODS v$IRODS_PKG_VERSION"
     /etc/init.d/irods start
@@ -108,10 +117,6 @@ if [[ "$1" == "irods-start" ]]; then
         sleep 5
     done
     sleep 5
-
-    # Generate .irodsA (must be done after the server is running)
-    echo "Prepare service account"
-    su - irods -c "echo \"${IRODS_ADMIN_PASS}\" | iinit"
 
     # Set minimum session timeout
     if [[ "$IRODS_ROLE" == "provider" ]]; then
