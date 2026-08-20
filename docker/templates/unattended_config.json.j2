@@ -34,8 +34,8 @@
         "schema_version": "v4",
         {# Unsure if following lines are valid here #}
 
-        {% if IRODS_SSL_CA_CERTIFICATE_FILE|default(false) %}
-        "irods_ssl_ca_certificate_file": "{{ IRODS_SSL_CA_CERTIFICATE_FILE }}",
+        {% if IRODS_SSL_CA_CERT_PATH|default(false) %}
+        "irods_ssl_ca_certificate_file": "{{ IRODS_SSL_CA_CERT_PATH }}",
         {% endif %}
 
         "irods_ssl_certificate_chain_file": "{{ IRODS_SSL_CERTIFICATE_CHAIN_FILE }}",

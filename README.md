@@ -68,7 +68,7 @@ The SSSD and SODAR auth settings, as well as the password minimum time setting, 
 | IRODS_SSL_DH_PARAMS_FILE         | /etc/irods/dhparams.pem          | both       |
 | IRODS_SSL_VERIFY_SERVER          | none                             | both       |
 | IRODS_PASSWORD_SALT              | tempsalt                         | both       |
-| IRODS_SSL_CA_CERTIFICATE_PATH    |                                  | both       |
+| IRODS_SSL_CA_CERT_PATH           |                                  | both       |
 | IRODS_CLIENT_SERVER_NEGOTIATION  | request_server_negotiation       | both       |
 | IRODS_CLIENT_SERVER_POLICY       | CS_NEG_REFUSE                    | both       |
 | IRODS_DEFAULT_RESOURCE_NAME      | demoResc                         | both       |
@@ -95,16 +95,7 @@ You will have to share `/var/lib/sss` between the SSSD container and iRODS so bo
 In our installations, we run [bihealth/sssd-docker](https://github.com/bihealth/sssd-docker) in a second container.
 
 
-## Upgrading
-
-### Upgrading To 4.3.5-2
-
-Breaking changes occurred between 4.3.5-1 and 4.3.5-2.
-
-- The variable `IRODS_SSL_CA_CERT_FILE` was renamed to `IRODS_SSL_CA_CERTIFICATE_FILE` to align with the corresponding iRODS variable name.
-- The variable `IRODS_LOG_LEVEL` was added.
-
-### Upgrading From iRODS 4.2
+## Upgrading From iRODS 4.2
 
 See [sodar-docker-compose](https://github.com/bihealth/sodar-docker-compose/) for upgrade instructions.
 
