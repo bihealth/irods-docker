@@ -110,8 +110,11 @@ if [[ "$1" == "irods-start" ]]; then
     echo "Start iRODS v$IRODS_PKG_VERSION"
     /etc/init.d/irods start
 
-    # Wait for iRODS server to become available
-    while ! nc -w 1 $IRODS_HOST_NAME $IRODS_ZONE_PORT &> /dev/null; do
+    # Wait for iRODS server to become available, as suggested in the docs:
+    # https://docs.irods.org/4.3.5/system_overview/tips_and_tricks/#monitoring-status-of-irods-servers
+    heartbeat_cmd="echo -e '\x00\x00\x00\x33<MsgHeader_PI><type>HEARTBEAT</type></MsgHeader_PI>' | \
+        (exec 3<>/dev/tcp/127.0.0.1/${IRODS_ZONE_PORT}; cat >&3; cat <&3; exec 3<&-)"
+    while [[ $(bash -c "$heartbeat_cmd") != "HEARTBEAT" ]]; do
         echo "Waiting for iRODS server ..."
         /etc/init.d/irods status
         sleep 5
