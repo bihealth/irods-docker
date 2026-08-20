@@ -1,5 +1,14 @@
 # Changelog
 
+## v4.3.5-2 (2026-08-20)
+
+- Add `IRODS_LOG_LEVEL` environment variable (#28)
+- Update custom PAM module to use `ldap_exec` and avoid relying on Python 2 (#32)
+- Update entrypoint to fail if `iinit` cannot create .irodsA file (#39)
+- Add S3 resource plugin (#61)
+- Fix log rotation (#65)
+- Upgrade image to Ubuntu 24.4 (#84)
+
 ## v4.3.5-1 (2026-07-27)
 
 - Upgrade to iRODS v4.3.5 (#76)
