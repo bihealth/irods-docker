@@ -7,6 +7,7 @@
 - Update entrypoint to fail if `iinit` cannot create .irodsA file (#39)
 - Add S3 resource plugin (#61)
 - Fix log rotation (#65)
+- Prevent "readStartupPack error (#72)
 - Upgrade image to Ubuntu 24.4 (#84)
 
 ## v4.3.5-1 (2026-07-27)
