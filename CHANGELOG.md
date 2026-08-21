@@ -1,14 +1,14 @@
 # Changelog
 
-## v4.3.5-2 (2026-08-20)
+## v4.3.5-2 (2026-08-21)
 
-- Add `IRODS_LOG_LEVEL` environment variable (#28)
-- Update custom PAM module to use `ldap_exec` and avoid relying on Python 2 (#32)
-- Update entrypoint to fail if `iinit` cannot create .irodsA file (#39)
 - Add S3 resource plugin (#61)
+- Add entrypoint exit on `iinit` failure (#39)
+- Add `IRODS_LOG_LEVEL` environment variable (#28)
+- Replace custom PAM module with `ldap_exec` implementation (#32)
 - Fix log rotation (#65)
-- Prevent "readStartupPack error (#72)
-- Upgrade image to Ubuntu 24.4 (#84)
+- Fix `readStartupPack` error on startup (#72)
+- Upgrade image to Ubuntu v24.04 (#84)
 
 ## v4.3.5-1 (2026-07-27)
 

@@ -1,6 +1,6 @@
 # Dockerized iRODS
 
-This repository contains the necessary files to build an iRODS Docker image based on Ubuntu 24.04.
+This repository contains the necessary files to build an iRODS Docker image based on Ubuntu v24.04.
 The code is based on [hurngchunlee/docker-irods](https://github.com/hurngchunlee/docker-irods).
 
 The image contains features specific to our [SODAR](https://github.com/bihealth/sodar-server) system, but using them is optional and the image also works as a generic iRODS server.
@@ -124,6 +124,10 @@ bash
 $ IRODS_PKG_VERSION=x.x.x IRODS_PYTHON_RULE_ENGINE_VERSION=y.y.y BUILD_VERSION=z ./build.sh
 ```
 
-Releases and images are tagged with the iRODS server version followed by the image build version. This means that e.g. the initial release for iRODS `4.3.5` will be tagged as `4.3.5-1`. Fixes or improvements to that release would then be published as `4.3.5-2`.
+## Versioning (for Developers)
 
-Note that if you are providing a non-default iRODS version, you will also have to provide the `irods-rule-engine-plugin-python` and `irods-resource-plugin-s3` version numbers with the `IRODS_PYTHON_RULE_ENGINE_VERSION` and `IRODS_RESOURCE_PLUGIN_S3_VERSION` env vars, respectively. These packages do not follow the same versioning conventions as the main iRODS packages. The full version includes the plugin version, a build suffix (typically `-0`), the iRODS version used during the build (e.g. `+4.3.5`), and an OS-dependent suffix (e.g. `~focal`). If you provide these env vars, the value is expected to be just the plugin version name without any suffix. You can find the available versions e.g. by running `apt-cache madison irods-rule-engine-plugin-python`.
+Releases and images are tagged with the iRODS server version followed by the image build version. In example, the initial release for iRODS `4.3.5` will be tagged as `4.3.5-1`. Fixes or improvements to that release would then be published as `4.3.5-2`.
+
+To build a non-default iRODS version, you will also have to provide the desired `irods-rule-engine-plugin-python` and `irods-resource-plugin-s3` version numbers. These are input with the `IRODS_PYTHON_RULE_ENGINE_VERSION` and `IRODS_RESOURCE_PLUGIN_S3_VERSION` env vars, respectively.
+
+Rule engine and plugin packages do not follow the versioning conventions of the main iRODS packages. The full version includes the plugin version, a build suffix (typically `-0`), the iRODS version used during the build (e.g. `+4.3.5`), and an OS-dependent suffix (e.g. `~focal`). If you provide these env vars, the value is expected to be just the plugin version name without any suffix. You can find available versions e.g. by running `apt-cache madison irods-rule-engine-plugin-python`.
