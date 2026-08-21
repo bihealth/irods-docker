@@ -1,5 +1,15 @@
 # Changelog
 
+## v4.3.5-2 (2026-08-21)
+
+- Add S3 resource plugin (#61)
+- Add entrypoint exit on `iinit` failure (#39)
+- Add `IRODS_LOG_LEVEL` environment variable (#28)
+- Replace custom PAM module with `ldap_exec` implementation (#32)
+- Fix log rotation (#65)
+- Fix `readStartupPack` error on startup (#72)
+- Upgrade image to Ubuntu v24.04 (#84)
+
 ## v4.3.5-1 (2026-07-27)
 
 - Upgrade to iRODS v4.3.5 (#76)
