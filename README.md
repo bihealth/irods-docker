@@ -42,6 +42,8 @@ iRODS can be run in either "provider" mode, which installs an iCAT catalogue ser
 
 The SSSD and SODAR auth settings, as well as the password minimum time setting, can be changed on an already provisioned server.
 
+The variable `PURGE_SYSTEMD_TIMESYNCD` is not directly related to iRODS but it is used to optionally remove the systemd-timesyncd package. This package creates a system account with UID 996, which conflicts with the UID used by the irods service account in some setups.
+
 | Variable name                    | Default Value                    | Role       |
 |----------------------------------|----------------------------------|------------|
 | IRODS_PKG_VERSION                | 4.3.5                            | both       |
@@ -75,6 +77,7 @@ The SSSD and SODAR auth settings, as well as the password minimum time setting, 
 | IRODS_RESOURCE_DIRECTORY         | /data/Vault                      | both       |
 | IRODS_DEFAULT_HASH_SCHEME        | SHA256                           | both       |
 | IRODS_LOG_LEVEL                  | info                             | both       |
+| PURGE_SYSTEMD_TIMESYNCD          | 0                                | both       |
 | IRODS_ODBC_DRIVER                | PostgreSQL Unicode               | provider   |
 | IRODS_ICAT_DBSERVER              | postgres                         | provider   |
 | IRODS_ICAT_DBPORT                | 5432                             | provider   |
