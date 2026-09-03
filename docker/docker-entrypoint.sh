@@ -6,6 +6,19 @@ set -euo pipefail
 
 if [[ "$1" == "irods-start" ]]; then
 
+    # Remove systemd-timesyncd due to a possible conflict between the irods
+    # service account and this package's service account uid (see #93)
+    if [[ "$PURGE_SYSTEMD_TIMESYNCD" == "1" ]] && id -u systemd-timesync 2> /dev/null; then
+        apt purge -y systemd-timesyncd
+        userdel systemd-timesync
+    fi
+
+    # Add the genquery.py script if missing
+    if ! [ -f /etc/irods/genquery.py ]; then
+        echo "Downloading genquery.py"
+        wget -O /etc/irods/genquery.py https://raw.githubusercontent.com/irods/irods_rule_engine_plugin_python/refs/heads/4-3-stable/genquery.py
+    fi
+
     # Set up service user and permissions
     groupadd -f -g $IRODS_SERVICE_ACCOUNT_GID $IRODS_SERVICE_ACCOUNT_GROUP
     useradd -d /var/lib/irods -s /bin/bash -u $IRODS_SERVICE_ACCOUNT_UID -g $IRODS_SERVICE_ACCOUNT_GID $IRODS_SERVICE_ACCOUNT_USER || true
