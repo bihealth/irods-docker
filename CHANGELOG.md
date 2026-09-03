@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.3.5-3 (2026-09-03)
+
+- Add `genquery.py` retrieval in entrypoint (#91)
+- Add `systemd-timesyncd` purging in entrypoint (#93)
+
 ## v4.3.5-2 (2026-08-21)
 
 - Add S3 resource plugin (#61)
